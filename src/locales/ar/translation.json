@@ -1,0 +1,194 @@
+{
+  "brand_name": "عقار",
+  "navbar": {
+    "home": "الرئيسية",
+    "favorites": "المفضلة",
+    "add_property": "أضف عقارك",
+    "dashboard": "لوحة التحكم",
+    "contact": "تواصل معنا",
+    "language": "اللغة",
+    "login": "تسجيل الدخول"
+  },
+  "hero": {
+    "title": "ابحث عن عقارك المثالي",
+    "subtitle": "اكتشف أفضل العقارات من حولك بكل سهولة",
+    "search": "بحث",
+    "placeholder": "ابحث حسب المدينة أو نوع العقار..."
+  },
+  "categories": {
+    "apartments": "شقق",
+    "villas": "فلل",
+    "shops": "محلات",
+    "offices": "مكاتب",
+    "lands": "أراضٍ"
+  },
+  "propertyTypes": {
+    "شقه": "apartment",
+    "فيلا": "villa",
+    "مكتب": "office",
+    "شقق": "apartments",
+    "فلل": "villas",
+    "محل": "shop",
+    "محلات": "shops",
+    "أرض": "land",
+    "أراض": "lands"
+  },
+  "cities": {
+    "نابلس": "نابلس",
+    "رام الله": "رام الله",
+    "القدس": "القدس",
+    "بيت لحم": "بيت لحم",
+    "الخليل": "الخليل",
+    "غزة": "غزة",
+    "أريحا": "أريحا",
+    "طولكرم": "طولكرم",
+    "قلقيلية": "قلقيلية",
+    "سلفيت": "سلفيت",
+    "جنين": "جنين",
+    "طوباس": "طوباس",
+    "البيرة": "البيرة",
+    "بيت جالا": "بيت جالا",
+    "بيت ساحور": "بيت ساحور"
+  },
+  "countries": {
+    "فلسطين": "فلسطين",
+    "الأردن": "الأردن",
+    "مصر": "مصر",
+    "السعودية": "السعودية",
+    "الإمارات": "الإمارات",
+    "قطر": "قطر",
+    "الكويت": "الكويت"
+  },
+  "features": {
+    "title": "مميزاتنا",
+    "easy": {
+      "title": "بحث سهل",
+      "text": "اعثر على عقارك في ثوانٍ"
+    },
+    "safe": {
+      "title": "آمن وموثوق",
+      "text": "جميع العقارات المعروضة موثوقة ومؤكدة"
+    },
+    "support": {
+      "title": "دعم مستمر",
+      "text": "فريقنا جاهز دائمًا لمساعدتك"
+    }
+  },
+  "propertiesSection": {
+    "title": "عقارات مميزة"
+  },
+  "propertyCard": {
+    "details": "التفاصيل",
+    "close": "إغلاق",
+    "propertyType": "نوع العقار",
+  
+    "offerType": "نوع العرض",
+    "location": "الموقع",
+    "area": "المساحة",
+    "bedrooms": "غرف النوم",
+    "bathrooms": "الحمامات",
+    "parking": "مواقف السيارات",
+    "yearBuilt": "سنة البناء",
+    "furnished": "مفروش",
+    "yes": "نعم",
+    "no": "لا",
+    "description": "الوصف",
+    "propertyDetails": "تفاصيل العقار",
+    "forSale": "للبيع",
+    "forRent": "للإيجار",
+    "priceUnit": "د.أ",
+    "price": "السعر",
+    "upload": "رفع الملفات",
+    "selectFiles": "اختر الصور والفيديو",
+    "note": "ملاحظة: يمكنك رفع عدة صور وفيديو واحد. يُنصح باختيار صورة أو فيديو لعرضه بشكل أساسي.",
+    "getLocation": "الحصول على الموقع",
+    "locationRetrieved": "تم الحصول على الموقع بنجاح",
+    "editLocation": "تعديل الموقع"
+
+  },
+  "footer": {
+    "about_title": "عن عقار",
+    "about_text": "عقار هو منصتك الموثوقة للعثور على العقار المثالي سواء للبيع أو للإيجار.",
+    "quick_links": "روابط سريعة",
+    "contact_us": "تواصل معنا",
+    "rights": "جميع الحقوق محفوظة © 2025 عقار",
+    "links": {
+      "home": "الرئيسية",
+      "favorites": "المفضلة",
+      "add_property": "أضف عقارك",
+      "dashboard": "لوحة التحكم"
+    }
+  },
+  "favorites": {
+    "page_title": "المفضلة",
+    "no_properties": "لا توجد عقارات مفضلة",
+    "start_adding": "ابدأ بإضافة عقارات إلى قائمة المفضلة الخاصة بك"
+  },
+  "dashboard": {
+    "pending_review": "قيد المراجعة",
+    "published_properties": "العقارات المنشورة",
+    "total_users": "إجمالي المستخدمين",
+    "pending_properties": "العقارات قيد المراجعة",
+    "approve": "ارسال",
+    "reject": "الغاء"
+  },
+  "addPropertyPage": {
+    "headerTitle": "عقاراتي المنشورة",
+    "headerSubtitle": "مرحباً، إدارة العقارات التي قمت بنشرها",
+    "addButton": "أضف عقارك الجديد"
+  },
+  "login": {
+    "welcome": "مرحباً بك في عقار!",
+    "tabLogin": "تسجيل الدخول",
+    "tabSignup": "إنشاء حساب",
+    "email": "البريد الإلكتروني",
+    "emailPlaceholder": "example@email.com",
+    "password": "كلمة المرور",
+    "passwordPlaceholder": "••••••••",
+    "confirmPassword": "تأكيد كلمة المرور",
+    "loginButton": "تسجيل الدخول",
+    "signupButton": "إنشاء حساب",
+    "or": "أو",
+    "loginWithGoogle": "تسجيل الدخول بواسطة جوجل",
+    "loginWithFacebook": "تسجيل الدخول بواسطة فيسبوك",
+    "signupWithGoogle": "إنشاء حساب باستخدام جوجل",
+    "signupWithFacebook": "إنشاء حساب باستخدام فيسبوك",
+    "firstName": "الاسم الأول",
+    "firstNamePlaceholder": "مراد",
+    "lastName": "الاسم الأخير",
+    "lastNamePlaceholder": "أحمد",
+    "passwordMismatch": "كلمات المرور غير متطابقة"
+  },
+  "contact": {
+    "title": "تواصل معنا",
+    "subtitle": "نحن هنا للمساعدة! تحدث معنا",
+    "sendMessage": "أرسل رسالة",
+    "name": "الاسم",
+    "namePlaceholder": "اسمك",
+    "email": "البريد الإلكتروني",
+    "emailPlaceholder": "example@email.com",
+    "subject": "الموضوع",
+    "subjectPlaceholder": "موضوع رسالتك",
+    "message": "الرسالة",
+    "messagePlaceholder": "اكتب رسالتك هنا...",
+    "sendButton": "إرسال الرسالة",
+    "phone": "الهاتف",
+    "address": "العنوان",
+    "addressValue": "فلسطين، نابلس، شارع الصفوان",
+    "businessHours": "ساعات العمل",
+    "saturdayFriday": "السبت - الخميس",
+    "friday": "الجمعة",
+    "closed": "مغلق"
+  },
+  "locationPicker": {
+    "selectLocation": "اختر الموقع",
+    "enterAddress": "أدخل العنوان",
+    "searchPlaceholder": "ابحث عن موقع أو أدخل العنوان يدوياً",
+    "searchHint": "يمكنك البحث عن موقع باستخدام Google Places أو إدخال العنوان يدوياً",
+    "loadingMap": "جاري تحميل الخريطة...",
+    "apiKeyNote": "ملاحظة: يجب إضافة Google Maps API Key في الملف LocationPickerDialog.tsx",
+    "selectedAddress": "العنوان المحدد",
+    "confirm": "تأكيد",
+    "cancel": "إلغاء"
+  }
+}

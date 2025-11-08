@@ -1,0 +1,199 @@
+{
+  "brand_name": "Aqar",
+  "navbar": {
+    "home": "Home",
+    "favorites": "Favorites",
+    "add_property": "Add Property",
+    "dashboard": "Dashboard",
+    "contact": "Contact Us",
+    "language": "Language",
+    "login": "Login"
+  },
+  "hero": {
+    "title": "Find Your Perfect Property",
+    "subtitle": "Discover the best properties around you with ease",
+    "search": "Search",
+    "placeholder": "Search by city or property type..."
+  },
+  "categories": {
+    "apartments": "Apartments",
+    "villas": "Villas",
+    "shops": "Shops",
+    "offices": "Offices",
+    "lands": "Lands"
+  },
+  "propertyTypes": {
+    "شقة": "apartment",
+    "شقه": "apartment",
+    "فيلا": "villa",
+    "مكتب": "office",
+    "شقق": "apartments",
+    "فلل": "villas",
+    "محل": "shop",
+    "محلات": "shops",
+    "أرض": "land",
+    "أراض": "lands",
+    "apartment": "apartment",
+    "villa": "villa",
+    "office": "office",
+    "shop": "shop",
+    "land": "land"
+  },
+  "cities": {
+    "نابلس": "Nablus",
+    "رام الله": "Ramallah",
+    "القدس": "Jerusalem",
+    "بيت لحم": "Bethlehem",
+    "الخليل": "Hebron",
+    "غزة": "Gaza",
+    "أريحا": "Jericho",
+    "طولكرم": "Tulkarm",
+    "قلقيلية": "Qalqilya",
+    "سلفيت": "Salfit",
+    "جنين": "Jenin",
+    "طوباس": "Tubas",
+    "البيرة": "Al-Bireh",
+    "بيت جالا": "Beit Jala",
+    "بيت ساحور": "Beit Sahour"
+  },
+  "countries": {
+  "فلسطين": "Palestine",
+  "الأردن": "Jordan",
+  "مصر": "Egypt",
+  "السعودية": "Saudi Arabia",
+  "الإمارات": "UAE",
+  "قطر": "Qatar",
+  "الكويت": "Kuwait"
+},
+
+  "features": {
+    "title": "Our Features",
+    "easy": {
+      "title": "Easy Search",
+      "text": "Find your property in seconds"
+    },
+    "safe": {
+      "title": "Safe and Trusted",
+      "text": "All listed properties are verified and trusted"
+    },
+    "support": {
+      "title": "Continuous Support",
+      "text": "Our team is always ready to help you"
+    }
+  },
+  "propertiesSection": {
+    "title": "Featured Properties"
+  },
+  "propertyCard": {
+    "details": "Details",
+    "close": "Close",
+    "propertyType": "Property Type",
+    "offerType": "Offer Type",
+    "location": "Location",
+    "area": "Area",
+    "bedrooms": "Bedrooms",
+    "bathrooms": "Bathrooms",
+    "parking": "Parking",
+    "yearBuilt": "Year Built",
+    "furnished": "Furnished",
+    "yes": "Yes",
+    "no": "No",
+    "description": "Description",
+    "propertyDetails": "Property Details",
+    "forSale": "For Sale",
+    "forRent": "For Rent",
+    "priceUnit": "JOD",
+    "price": "Price",
+    "upload": "Upload Files",
+    "selectFiles": "Select images and video",
+    "note": "Note: You can upload multiple images and one video. It's recommended to select a main image or video.",
+    "getLocation": "Get Location",
+    "locationRetrieved": "Location retrieved successfully",
+    "editLocation": "Edit Location"
+  },
+  "footer": {
+    "about_title": "About Aqar",
+    "about_text": "Aqar is your trusted platform to find the perfect property for sale or rent.",
+    "quick_links": "Quick Links",
+    "contact_us": "Contact Us",
+    "rights": "All rights reserved © 2025 Aqar",
+    "links": {
+      "home": "Home",
+      "favorites": "Favorites",
+      "add_property": "Add Property",
+      "dashboard": "Dashboard"
+    }
+  },
+  "favorites": {
+  "page_title": "Favorites",
+  "no_properties": "No favorite properties",
+  "start_adding": "Start adding properties to your favorites list"
+},
+"dashboard": {
+  "pending_review": "Pending Review",
+  "published_properties": "Published Properties",
+  "total_users": "Total Users",
+  "pending_properties": "Pending Properties",
+  "approve": "Send",
+  "reject": "Cancel"
+},
+"addPropertyPage": {
+  "headerTitle": "My Published Properties",
+  "headerSubtitle": "Manage the properties you have posted",
+  "addButton": "Add Your New Property"
+},
+"login": {
+  "welcome": "Welcome to Aqar!",
+  "tabLogin": "Login",
+  "tabSignup": "Sign Up",
+  "email": "Email",
+  "emailPlaceholder": "example@email.com",
+  "password": "Password",
+  "passwordPlaceholder": "••••••••",
+  "confirmPassword": "Confirm Password",
+  "loginButton": "Login",
+  "signupButton": "Sign Up",
+  "or": "or",
+  "loginWithGoogle": "Login with Google",
+  "loginWithFacebook": "Login with Facebook",
+  "signupWithGoogle": "Sign up with Google",
+    "signupWithFacebook": "Sign up with Facebook",
+    "firstName": "First Name",
+    "firstNamePlaceholder": "John",
+    "lastName": "Last Name",
+    "lastNamePlaceholder": "Doe",
+    "passwordMismatch": "Passwords do not match"
+  },
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "We're here to help! Get in touch with us",
+    "sendMessage": "Send Message",
+    "name": "Name",
+    "namePlaceholder": "Your name",
+    "email": "Email",
+    "emailPlaceholder": "example@email.com",
+    "subject": "Subject",
+    "subjectPlaceholder": "Your message subject",
+    "message": "Message",
+    "messagePlaceholder": "Write your message here...",
+    "sendButton": "Send Message",
+    "phone": "Phone",
+    "address": "Address",
+    "addressValue": "Palestine, Nablus, Sufyan Street",
+    "businessHours": "Business Hours",
+    "saturdayFriday": "Saturday - Thursday",
+    "friday": "Friday",
+    "closed": "Closed"
+  },
+  "locationPicker": {
+    "selectLocation": "Select Location",
+    "enterAddress": "Enter Address",
+    "searchPlaceholder": "Search for a location or enter address manually",
+    "searchHint": "You can search for a location using Google Places or enter the address manually",
+    "loadingMap": "Loading map...",
+    "apiKeyNote": "Note: You need to add Google Maps API Key in LocationPickerDialog.tsx file",
+    "selectedAddress": "Selected Address",
+    "confirm": "Confirm",
+    "cancel": "Cancel"
+  }
+}
