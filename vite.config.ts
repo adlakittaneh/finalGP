@@ -8,7 +8,7 @@ export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
     port: 8081, // نفس البورت اللي بتستخدميه
-    allowedHosts: [".ngrok-free.dev"], // السماح لأي رابط ngrok
+    allowedHosts: ["local.easyaqar.org","easyaqar.org"], // السماح لأي رابط ngrok
   },
   plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
   resolve: {

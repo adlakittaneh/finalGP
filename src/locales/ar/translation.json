@@ -7,7 +7,8 @@
     "dashboard": "لوحة التحكم",
     "contact": "تواصل معنا",
     "language": "اللغة",
-    "login": "تسجيل الدخول"
+    "login": "تسجيل الدخول",
+    "logout": "تسجيل الخروج"
   },
   "hero": {
     "title": "ابحث عن عقارك المثالي",
@@ -81,7 +82,6 @@
     "details": "التفاصيل",
     "close": "إغلاق",
     "propertyType": "نوع العقار",
-  
     "offerType": "نوع العرض",
     "location": "الموقع",
     "area": "المساحة",
@@ -92,7 +92,7 @@
     "furnished": "مفروش",
     "yes": "نعم",
     "no": "لا",
-    "description": "الوصف",
+    "description": "الوصف بالعربيه",
     "propertyDetails": "تفاصيل العقار",
     "forSale": "للبيع",
     "forRent": "للإيجار",
@@ -103,7 +103,16 @@
     "note": "ملاحظة: يمكنك رفع عدة صور وفيديو واحد. يُنصح باختيار صورة أو فيديو لعرضه بشكل أساسي.",
     "getLocation": "الحصول على الموقع",
     "locationRetrieved": "تم الحصول على الموقع بنجاح",
-    "editLocation": "تعديل الموقع"
+    "editLocation": "تعديل الموقع",
+    "TitleAr": " العنوان (بالعربية)",
+    "TitleEn": " العنوان (بالإنجليزية)",
+"Country": "الدولة",
+    "city": "المدينة",
+    "selectCountry": "اختر الدولة",
+    "selectCity": "اختر المدينة",
+
+     "descriptionEn": " الوصف بالانجليزيه",
+    "descriptionAr":" الوصف بالعربيه"
 
   },
   "footer": {
@@ -146,6 +155,8 @@
     "password": "كلمة المرور",
     "passwordPlaceholder": "••••••••",
     "confirmPassword": "تأكيد كلمة المرور",
+    "phoneNumber": "رقم الهاتف",
+    "phoneNumberPlaceholder": "059",
     "loginButton": "تسجيل الدخول",
     "signupButton": "إنشاء حساب",
     "or": "أو",
@@ -157,7 +168,12 @@
     "firstNamePlaceholder": "مراد",
     "lastName": "الاسم الأخير",
     "lastNamePlaceholder": "أحمد",
-    "passwordMismatch": "كلمات المرور غير متطابقة"
+    "passwordMismatch": "كلمات المرور غير متطابقة",
+    "otpTitle": "تأكيد تفعيل الحساب",
+    "otpSubtitle": "أدخل رمز التفعيل المكون من 6 أرقام",
+    "otpSubtitleWithEmail": "أرسلنا الرمز إلى {{email}}",
+    "otpConfirm": "تأكيد الحساب",
+    "otpCancel": "إغلاق"
   },
   "contact": {
     "title": "تواصل معنا",

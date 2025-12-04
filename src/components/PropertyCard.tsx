@@ -62,6 +62,7 @@ const PropertyCard = ({
   const [showDetails, setShowDetails] = useState(false);
   const { language } = useLanguage();
   const { t } = useTranslation();
+  const isRTL = language === "AR";
 
   // Combine video and images for display
   const media = video ? [video, ...images] : images;
@@ -169,14 +170,14 @@ const handleSpeak = (e: React.MouseEvent) => {
     langCode = "en-US";
   }
 
-  // 🎙️ إعداد النطق
+  //  إعداد النطق
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = langCode;
   utterance.rate = 0.9;
   utterance.pitch = 1;
   utterance.volume = 1;
 
-  // 🔊 اختيار الصوت المناسب
+  //  اختيار الصوت المناسب
   const voices = speechSynthesis.getVoices();
   let selectedVoice;
   if (langCode.startsWith("ar")) {
@@ -219,26 +220,27 @@ const handleSpeak = (e: React.MouseEvent) => {
             <>
               <button
                 onClick={prevImage}
-                className="absolute left-2 top-1/2 -translate-y-1/2 bg-background/80 backdrop-blur-sm p-2 rounded-full hover:bg-background transition-smooth"
+                className={`absolute ${isRTL ? "right-2" : "left-2"} top-1/2 -translate-y-1/2 bg-background/80 backdrop-blur-sm p-2 rounded-full hover:bg-background transition-smooth`}
               >
-                <ChevronRight className="w-4 h-4" />
+                {isRTL ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
               </button>
               <button
                 onClick={nextImage}
-                className="absolute right-2 top-1/2 -translate-y-1/2 bg-background/80 backdrop-blur-sm p-2 rounded-full hover:bg-background transition-smooth"
+                className={`absolute ${isRTL ? "left-2" : "right-2"} top-1/2 -translate-y-1/2 bg-background/80 backdrop-blur-sm p-2 rounded-full hover:bg-background transition-smooth`}
               >
-                <ChevronLeft className="w-4 h-4" />
+                {isRTL ? <ChevronLeft className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
               </button>
             </>
           )}
 
-          <div className="absolute top-3 right-3">
+          <div className={`absolute top-3 ${isRTL ? "right-3" : "left-3"}`}>
             <Badge className={type === "للبيع" ? "gradient-primary" : "bg-green-500"}>
               {language === "AR" ? type : (type === "للبيع" ? t("propertyCard.forSale") : t("propertyCard.forRent"))}
             </Badge>
           </div>
 
           {/* Favorite Button */}
+          {/* 
           <button
             onClick={toggleFavorite}
             className="absolute top-3 left-3 bg-background/90 backdrop-blur-sm p-2 rounded-full hover:bg-background transition-all hover:scale-110"
@@ -249,6 +251,7 @@ const handleSpeak = (e: React.MouseEvent) => {
               }`} 
             />
           </button>
+           */}
         </div>
 
         <CardContent className="p-5">
@@ -413,7 +416,7 @@ const handleSpeak = (e: React.MouseEvent) => {
               {area && (
                 <div>
                   <p className="text-sm text-muted-foreground mb-1">{t("propertyCard.area")}</p>
-                  <p className="font-semibold">{area} م²</p>
+                  <p className="font-semibold">{area} {isRTL ? "م²" : "m²"}</p>
                 </div>
               )}
               {bedrooms && (

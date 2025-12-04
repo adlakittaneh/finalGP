@@ -7,7 +7,8 @@
     "dashboard": "Dashboard",
     "contact": "Contact Us",
     "language": "Language",
-    "login": "Login"
+    "login": "Login",
+    "logout": "Logout"
   },
   "hero": {
     "title": "Find Your Perfect Property",
@@ -23,21 +24,11 @@
     "lands": "Lands"
   },
   "propertyTypes": {
-    "شقة": "apartment",
-    "شقه": "apartment",
-    "فيلا": "villa",
-    "مكتب": "office",
+    "مكاتب": "offices",
     "شقق": "apartments",
     "فلل": "villas",
-    "محل": "shop",
     "محلات": "shops",
-    "أرض": "land",
-    "أراض": "lands",
-    "apartment": "apartment",
-    "villa": "villa",
-    "office": "office",
-    "shop": "shop",
-    "land": "land"
+    "أراض": "lands"
   },
   "cities": {
     "نابلس": "Nablus",
@@ -98,8 +89,16 @@
     "furnished": "Furnished",
     "yes": "Yes",
     "no": "No",
-    "description": "Description",
+    "descriptionEn": "description in English",
+    "descriptionAr":" description in Arabic",
     "propertyDetails": "Property Details",
+    "TitleAr": "Title (Arabic)",
+    "TitleEn": "Title (English)",
+"Country": "Country",
+    "City": "City",
+    "selectCountry": "Select Country",
+    "selectCity": "Select City",
+
     "forSale": "For Sale",
     "forRent": "For Rent",
     "priceUnit": "JOD",
@@ -149,8 +148,11 @@
   "email": "Email",
   "emailPlaceholder": "example@email.com",
   "password": "Password",
-  "passwordPlaceholder": "••••••••",
+  "passwordPlaceholder": "******",
+
   "confirmPassword": "Confirm Password",
+  "phoneNumber": "Phone Number",
+  "phoneNumberPlaceholder": "059",
   "loginButton": "Login",
   "signupButton": "Sign Up",
   "or": "or",
@@ -159,10 +161,15 @@
   "signupWithGoogle": "Sign up with Google",
     "signupWithFacebook": "Sign up with Facebook",
     "firstName": "First Name",
-    "firstNamePlaceholder": "John",
+    "firstNamePlaceholder": "Morad",
     "lastName": "Last Name",
-    "lastNamePlaceholder": "Doe",
-    "passwordMismatch": "Passwords do not match"
+    "lastNamePlaceholder": "Ahmad",
+    "passwordMismatch": "Passwords do not match",
+    "otpTitle": "Verify Your Account",
+    "otpSubtitle": "Enter the 6-digit code sent to your email",
+    "otpSubtitleWithEmail": "We sent the code to {{email}}",
+    "otpConfirm": "Confirm",
+    "otpCancel": "Close"
   },
   "contact": {
     "title": "Contact Us",

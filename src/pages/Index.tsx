@@ -12,10 +12,13 @@ import background from "@/assets/back.jpeg";
 import heroVideo from "@/assets/aqar.mp4"; 
 import property2 from "@/assets/property-2.jpg";
 import nablusVideo from "@/assets/nablus.mp4";
+import { useLanguage } from "@/context/LanguageContext";
+
 const Index = () => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
+  const { language } = useLanguage();
   const [searchQuery, setSearchQuery] = useState("");
-  const isArabic = i18n.language === "ar" || i18n.language === "AR" ;
+  const isRTL = language === "AR";
 
 
   const sampleProperties: PropertyCardProps[] = [
@@ -119,7 +122,7 @@ const Index = () => {
   type="button"
   title="التحدث بدلاً من الكتابة"
   className={`absolute top-1/2 -translate-y-1/2 flex items-center justify-center w-8 h-8 rounded-full transition ${
-    isArabic ? "left-3" : "right-3"
+    isRTL ? "left-3" : "right-3"
   }`}
   style={{
     backgroundColor: "rgba(13, 61, 127, 0.08)",
@@ -145,7 +148,7 @@ const Index = () => {
     </div>
 
     <Button size="lg" className="gradient-primary px-8">
-      <Search className="w-5 h-5 ml-2" />
+      <Search className={`w-5 h-5 ${isRTL ? "mr-2" : "ml-2"}`} />
       {t("hero.search")}
     </Button>
   </div>
@@ -159,84 +162,127 @@ const Index = () => {
     {t("categories.title", "Browse by Property Type")}
   </h2>
 
-  <div className="flex flex-wrap justify-center gap-14">
-    {[
-      { name: t("categories.apartments"), path: "/properties/apartments", icon: "🏠" },
-      { name: t("categories.villas"), path: "/properties/villas", icon: "🏘️" },
-      { name: t("categories.shops"), path: "/properties/shops", icon: "🏬" },
-      { name: t("categories.offices"), path: "/properties/offices", icon: "🏢" },
-      { name: t("categories.lands"), path: "/properties/lands", icon: "🌍" },
-    ].map((category) => (
-      <Link
-        key={category.name}
-        to={category.path}
-        className="flex flex-col items-center group"
+ <div className="flex flex-wrap justify-center gap-16">
+  {[
+    { name: t("categories.apartments"), path: "/properties/apartments", img: "/icons/apartment.jpg" },
+    { name: t("categories.villas"), path: "/properties/villas", img: "/icons/villa.jpg" },
+    { name: t("categories.shops"), path: "/properties/shops", img: "/icons/shop.jpg" },
+    { name: t("categories.offices"), path: "/properties/offices", img: "/icons/office.jpg" },
+    { name: t("categories.lands"), path: "/properties/lands", img: "/icons/land.jpg" },
+  ].map((category) => (
+    <Link
+      key={category.name}
+      to={category.path}
+      className="flex flex-col items-center group"
+    >
+      <div
+        className="w-36 h-36 flex items-center justify-center rounded-full bg-[#13478f] shadow-md 
+        transition-all duration-300 group-hover:scale-110 group-hover:shadow-2xl overflow-hidden"
       >
-        {/* الدائرة التي تحتوي على الأيقونة */}
-        <div
-          className="w-28 h-28 flex items-center justify-center rounded-full bg-[#13478f] text-white shadow-md transition-all duration-300 group-hover:scale-110 group-hover:shadow-2xl"
-        >
-          <span className="text-5xl">{category.icon}</span>
-        </div>
+        <img
+          src={category.img}
+          alt={category.name}
+          className="w-full h-full object-cover rounded-full transition-transform duration-300 group-hover:scale-110"
+        />
+      </div>
 
-        {/* اسم نوع العقار تحت الدائرة */}
-        <span className="mt-4 text-lg font-semibold text-gray-700 group-hover:text-[#13478f] transition-colors duration-300">
-          {category.name}
-        </span>
-      </Link>
-    ))}
-  </div>
+      <span className="mt-4 text-xl font-semibold text-gray-700 group-hover:text-[#13478f] transition-colors duration-300">
+        {category.name}
+      </span>
+    </Link>
+  ))}
+</div>
+
 </section>
 
       {/* Features Section */}
       <section className="py-20 bg-muted/30">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12"></div>
+  <div className="container mx-auto px-4">
+    <h3 className="text-3xl font-bold text-center mb-12">
+      {t("features.title")}
+    </h3>
 
-          <div className="grid md:grid-cols-2 gap-12 items-center max-w-6xl mx-auto mt-16">
-            <div>
-              <h3 className="text-3xl font-bold mb-6">{t("features.title")}</h3>
-              <div className="space-y-4">
-                {[
-                  { title: t("features.easy.title"), text: t("features.easy.text") },
-                  { title: t("features.safe.title"), text: t("features.safe.text") },
-                  { title: t("features.support.title"), text: t("features.support.text") },
-                ].map((item) => (
-                  <div className="flex gap-4" key={item.title}>
-                    <div
-                      className="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0"
-                      style={{
-                        backgroundColor: "transparent",
-                        border: "2px solid #13478f",
-                      }}
-                    >
-                      <span className="text-2xl" style={{ color: "#13478f" }}>
-                        ✓
-                      </span>
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-lg mb-1">{item.title}</h4>
-                      <p className="text-muted-foreground">{item.text}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
 
-            {/* Video Section */}
-            <div className="relative h-80 rounded-2xl overflow-hidden shadow-elegant">
-              <video
-                className="w-full h-full object-cover"
-                src={heroVideo}
-                autoPlay
-                loop
-                muted
-                playsInline
-              />
-            </div>
-          </div>
+      {/* بطاقة 1 */}
+      <div className="bg-white shadow-md rounded-2xl p-8 text-center hover:shadow-xl transition">
+        <div className="flex justify-center mb-4">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="w-14 h-14 text-primary"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M21 21l-4.35-4.35m0 0A7 7 0 104.34 4.34a7 7 0 0012.31 12.31z"
+            />
+          </svg>
         </div>
-      </section>
+
+        <h4 className="font-bold text-xl mb-2">
+          {t("features.easy.title")}
+        </h4>
+        <p className="text-muted-foreground">
+          {t("features.easy.text")}
+        </p>
+      </div>
+
+      {/* بطاقة 2 */}
+      <div className="bg-white shadow-md rounded-2xl p-8 text-center hover:shadow-xl transition">
+        <div className="flex justify-center mb-4">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="w-14 h-14 text-primary"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+          >
+            <path d="M12 1.75A10.25 10.25 0 1 0 22.25 12 10.262 10.262 0 0 0 12 1.75Zm-.75 14.5L7 12l1.06-1.06 3.19 3.19 5.69-5.69L18 9.5Z" />
+          </svg>
+        </div>
+
+        <h4 className="font-bold text-xl mb-2">
+          {t("features.safe.title")}
+        </h4>
+        <p className="text-muted-foreground">
+          {t("features.safe.text")}
+        </p>
+      </div>
+
+      {/* بطاقة 3 */}
+      <div className="bg-white shadow-md rounded-2xl p-8 text-center hover:shadow-xl transition">
+        <div className="flex justify-center mb-4">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="w-14 h-14 text-primary"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M18.36 5.64a9 9 0 11-12.73 0M12 7v5l3 3"
+            />
+          </svg>
+        </div>
+
+        <h4 className="font-bold text-xl mb-2">
+          {t("features.support.title")}
+        </h4>
+        <p className="text-muted-foreground">
+          {t("features.support.text")}
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
 
       {/* Properties Section */}
       <section className="py-20">

@@ -14,6 +14,7 @@ import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
 
 import { LanguageProvider } from "./context/LanguageContext";
+import { AuthProvider } from "./context/AuthContext";
 
 const queryClient = new QueryClient();
 
@@ -33,22 +34,25 @@ const App = () => {
         <Toaster />
         <Sonner />
         <LanguageProvider>
-          <BrowserRouter>
-            
-
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/add-property" element={<AddProperty />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/favorites" element={<Favorites />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </BrowserRouter>
+          <AuthProvider>
+            <BrowserRouter>
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/add-property" element={<AddProperty />} />
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/favorites" element={<Favorites />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </BrowserRouter>
+          </AuthProvider>
         </LanguageProvider>
+        
       </TooltipProvider>
+      
     </QueryClientProvider>
+    
   );
 };
 export default App;

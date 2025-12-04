@@ -75,15 +75,7 @@ const Contact = () => {
                 </CardContent>
               </Card>
 
-              <Card className="shadow-card bg-gradient-to-br from-primary/5 to-primary/10">
-                <CardContent className="pt-6">
-                  <h3 className="font-semibold mb-2">{t("contact.businessHours")}</h3>
-                  <div className="space-y-2 text-sm text-muted-foreground">
-                    <p>{t("contact.saturdayFriday")}: 9:00 AM - 6:00 PM</p>
-                    <p>{t("contact.friday")}: {t("contact.closed")}</p>
-                  </div>
-                </CardContent>
-              </Card>
+             
             </div>
           </div>
         </div>
