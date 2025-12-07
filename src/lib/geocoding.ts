@@ -8,6 +8,18 @@ interface LocationData {
   lng: number;
 }
 
+// Helper function to safely format coordinates
+const formatCoordinate = (coord: number | string | undefined | null): string => {
+  if (coord === null || coord === undefined || coord === '') {
+    return '0.000000';
+  }
+  const num = typeof coord === 'number' ? coord : Number(coord);
+  if (isNaN(num)) {
+    return '0.000000';
+  }
+  return num.toFixed(6);
+};
+
 /**
  * Format address to be short and clear: Country, City, District
  * @param addressData The full address data from Nominatim
@@ -88,12 +100,12 @@ export async function reverseGeocode(
       return formattedAddress || data.display_name;
     } else {
       // If no results, return coordinates as fallback
-      return `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+      return `${formatCoordinate(lat)}, ${formatCoordinate(lng)}`;
     }
   } catch (error) {
     console.error("Error in reverseGeocode:", error);
     // Return coordinates as fallback
-    return `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+    return `${formatCoordinate(lat)}, ${formatCoordinate(lng)}`;
   }
 }
 

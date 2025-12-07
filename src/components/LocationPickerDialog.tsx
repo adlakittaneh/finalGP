@@ -27,6 +27,18 @@ interface LocationPickerDialogProps {
   initialLocation?: { lat: number; lng: number; address: string } | null;
 }
 
+// Helper function to safely format coordinates
+const formatCoordinate = (coord: number | string | undefined | null): string => {
+  if (coord === null || coord === undefined || coord === '') {
+    return '0.000000';
+  }
+  const num = typeof coord === 'number' ? coord : Number(coord);
+  if (isNaN(num)) {
+    return '0.000000';
+  }
+  return num.toFixed(6);
+};
+
 const LocationPickerDialog = ({
   open,
   onOpenChange,
@@ -48,8 +60,12 @@ const LocationPickerDialog = ({
   useEffect(() => {
     if (initialLocation) {
       setSelectedLocation({ lat: initialLocation.lat, lng: initialLocation.lng });
-      setSelectedAddress(initialLocation.address);
-      setSearchQuery(initialLocation.address);
+      // Always use coordinates as address
+      const formattedLat = formatCoordinate(initialLocation.lat);
+      const formattedLng = formatCoordinate(initialLocation.lng);
+      const coordString = `${formattedLat}, ${formattedLng}`;
+      setSelectedAddress(coordString);
+      setSearchQuery(coordString);
     } else {
       setSelectedLocation(null);
       setSelectedAddress("");
@@ -154,7 +170,7 @@ const LocationPickerDialog = ({
         delete window.initGoogleMap;
       }
     };
-  }, [open]);
+  }, [open, toast]);
 
   // Initialize map and components
   useEffect(() => {
@@ -195,7 +211,7 @@ const LocationPickerDialog = ({
 
       // Determine center location
       const defaultCenter = selectedLocation || (initialLocation ? { lat: initialLocation.lat, lng: initialLocation.lng } : null) || { lat: 32.2211, lng: 35.2544 };
-      const defaultZoom = (selectedLocation || initialLocation) ? 15 : 10;
+      const defaultZoom = (selectedLocation || initialLocation) ? 8 : 10;
 
       // Initialize new map
       try {
@@ -281,22 +297,12 @@ const LocationPickerDialog = ({
           animation: window.google.maps.Animation.DROP,
         });
 
-        // Get address for location
-        if (geocoderRef.current) {
-          geocoderRef.current.geocode(
-            { location: location },
-            (results: any[], status: string) => {
-              if (status === "OK" && results[0]) {
-                setSelectedAddress(results[0].formatted_address);
-                setSearchQuery(results[0].formatted_address);
-              } else {
-                // Fallback if geocoding fails
-                setSelectedAddress(`${location.lat.toFixed(6)}, ${location.lng.toFixed(6)}`);
-                setSearchQuery(`${location.lat.toFixed(6)}, ${location.lng.toFixed(6)}`);
-              }
-            }
-          );
-        }
+        // Set address to coordinates (lat, lng) instead of formatted address
+        const formattedLat = formatCoordinate(location.lat);
+        const formattedLng = formatCoordinate(location.lng);
+        const coordString = `${formattedLat}, ${formattedLng}`;
+        setSelectedAddress(coordString);
+        setSearchQuery(coordString);
 
         // Update marker position on drag
         markerRef.current.addListener("dragend", (e: any) => {
@@ -362,10 +368,8 @@ const LocationPickerDialog = ({
             map.setCenter(location);
             map.setZoom(15);
             
-            // Update location
+            // Update location (this will set address to coordinates)
             updateLocation(location);
-            setSelectedAddress(place.formatted_address || place.name || "");
-            setSearchQuery(place.formatted_address || place.name || "");
           }
         });
       }
@@ -387,7 +391,7 @@ const LocationPickerDialog = ({
         }
       }
     };
-  }, [mapLoaded, open, initialLocation?.lat, initialLocation?.lng]); // Dependencies
+  }, [mapLoaded, open, selectedLocation, initialLocation]); // Dependencies
 
   // Update map center when selectedLocation or initialLocation changes (if map exists)
   useEffect(() => {
@@ -417,7 +421,13 @@ const LocationPickerDialog = ({
               lng: results[0].geometry.location.lng(),
             };
             setSelectedLocation(location);
-            setSelectedAddress(results[0].formatted_address);
+            
+            // Set address to coordinates instead of formatted address
+            const formattedLat = formatCoordinate(location.lat);
+            const formattedLng = formatCoordinate(location.lng);
+            const coordString = `${formattedLat}, ${formattedLng}`;
+            setSelectedAddress(coordString);
+            setSearchQuery(coordString);
 
             if (mapInstanceRef.current) {
               mapInstanceRef.current.setCenter(location);
@@ -444,18 +454,13 @@ const LocationPickerDialog = ({
                   lng: e.latLng.lng(),
                 };
                 setSelectedLocation(updatedLocation);
-
-                if (geocoderRef.current) {
-                  geocoderRef.current.geocode(
-                    { location: updatedLocation },
-                    (results: any[], status: string) => {
-                      if (status === "OK" && results[0]) {
-                        setSelectedAddress(results[0].formatted_address);
-                        setSearchQuery(results[0].formatted_address);
-                      }
-                    }
-                  );
-                }
+                
+                // Set address to coordinates instead of formatted address
+                const updatedLat = formatCoordinate(updatedLocation.lat);
+                const updatedLng = formatCoordinate(updatedLocation.lng);
+                const updatedCoordString = `${updatedLat}, ${updatedLng}`;
+                setSelectedAddress(updatedCoordString);
+                setSearchQuery(updatedCoordString);
               });
             }
           } else {
@@ -477,9 +482,23 @@ const LocationPickerDialog = ({
     const address = selectedAddress || searchQuery;
     
     if (location && address) {
+      // Ensure coordinates are numbers
+      const lat = typeof location.lat === 'number' ? location.lat : Number(location.lat || 0);
+      const lng = typeof location.lng === 'number' ? location.lng : Number(location.lng || 0);
+      
+      // Validate coordinates
+      if (isNaN(lat) || isNaN(lng)) {
+        toast({
+          title: "خطأ في الإحداثيات",
+          description: "الإحداثيات غير صالحة. يرجى تحديد موقع صحيح.",
+          variant: "destructive",
+        });
+        return;
+      }
+      
       onLocationSelected({
-        lat: location.lat,
-        lng: location.lng,
+        lat: lat,
+        lng: lng,
         address: address,
       });
       // النافذة ستُغلق تلقائياً وستفتح نافذة التفاصيل في AddProperty.tsx
@@ -563,9 +582,10 @@ const LocationPickerDialog = ({
                           <li className="mb-1">في <strong>"Application restrictions"</strong> اختر <strong>"HTTP referrers (web sites)"</strong></li>
                           <li className="mb-1">أضف هذه النطاقات:</li>
                           <ul className="list-disc list-inside mr-4 mt-1 space-y-0.5">
-                            <li><code className="bg-background px-1 rounded">http://localhost:8080/*</code></li>
-                            <li><code className="bg-background px-1 rounded">http://localhost:8080</code></li>
-                            <li><code className="bg-background px-1 rounded">http://127.0.0.1:8080/*</code></li>
+                            <li><code className="bg-background px-1 rounded">http://localhost:8081/*</code></li>
+                            <li><code className="bg-background px-1 rounded">http://localhost:8081</code></li>
+                            <li><code className="bg-background px-1 rounded">http://127.0.0.1:8081/*</code></li>
+                            <li><code className="bg-background px-1 rounded">http://127.0.0.1:8081</code></li>
                           </ul>
                           <li className="mb-1">في <strong>"API restrictions"</strong> تأكد من تفعيل: Maps JavaScript API, Geocoding API, Places API</li>
                           <li className="mb-1">احفظ التغييرات</li>
@@ -612,16 +632,13 @@ const LocationPickerDialog = ({
             )}
           </div>
 
-          {/* Selected Address Display */}
+          {/* Selected Address Display (Coordinates) */}
           {selectedAddress && selectedLocation && (
             <div className="bg-primary/10 border border-primary/20 p-3 rounded-lg flex items-start gap-2">
               <MapPin className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
               <div className="flex-1">
                 <p className="text-sm font-medium text-primary">{t("locationPicker.selectedAddress")}</p>
-                <p className="text-sm text-muted-foreground mt-1">{selectedAddress}</p>
-                <p className="text-xs text-muted-foreground mt-1">
-                  الإحداثيات: {selectedLocation.lat.toFixed(6)}, {selectedLocation.lng.toFixed(6)}
-                </p>
+                <p className="text-sm text-muted-foreground mt-1 font-mono">{selectedAddress}</p>
               </div>
             </div>
           )}

@@ -32,9 +32,21 @@ import { useLanguage } from "@/context/LanguageContext";
 
 import { storage } from "@/firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-
+import { apiFetch } from "@/api/apiFetch";
 
 const API_BASE = "http://easyaqar.org/api";
+
+// Helper function to safely format coordinates
+const formatCoordinate = (coord: number | string | undefined | null): string => {
+  if (coord === null || coord === undefined || coord === '') {
+    return '0.000000';
+  }
+  const num = typeof coord === 'number' ? coord : Number(coord);
+  if (isNaN(num)) {
+    return '0.000000';
+  }
+  return num.toFixed(6);
+};
 
 const AddProperty = () => {
   const { t } = useTranslation();
@@ -110,12 +122,13 @@ const AddProperty = () => {
 
   const fetchCountries = async () => {
     try {
-      const res = await fetch(`${API_BASE}/locations/countries?page=0&size=100"`, {
+      const res = await apiFetch(`${API_BASE}/locations/countries?page=0&size=100"`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
 
       });
+      console.log("Fetch countries response status:", res.status);
       const json = await res.json();
       const list = Array.isArray(json.content) ? json.content : [];
       setCountries(list);
@@ -257,8 +270,8 @@ const AddProperty = () => {
         parking: parking,
         yearBuilt: yearBuilt ? Number(yearBuilt) : undefined,
         furnished: furnished,
-        latitude: location.lat,
-        longitude: location.lng,
+        latitude: typeof location.lat === 'number' ? location.lat : Number(location.lat || 0),
+        longitude: typeof location.lng === 'number' ? location.lng : Number(location.lng || 0),
         mediaUrls: mediaUrls,
       };
 
@@ -352,9 +365,6 @@ const AddProperty = () => {
                   {t("propertyCard.editLocation")}
                 </Button>
               </div>
-              {location && (
-                <p className="text-xs text-muted-foreground">الإحداثيات: {location.lat.toFixed(6)}, {location.lng.toFixed(6)}</p>
-              )}
             </div>
 
             <div className="grid md:grid-cols-2 gap-4">
