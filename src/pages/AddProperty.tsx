@@ -48,6 +48,13 @@ const formatCoordinate = (coord: number | string | undefined | null): string => 
   return num.toFixed(6);
 };
 
+/*************  ✨ Windsurf Command ⭐  *************/
+/**
+ * AddProperty component is responsible for rendering the form to add a new property listing.
+ * It includes fields for location, description, title, price, area, bedrooms, bathrooms, parking, year built, furnished, and media uploads.
+ * After submitting the form, it sends a POST request to the API to create a new property listing.
+ */
+/*******  08f16347-5fa7-4050-a838-5513cceed4d2  *******/
 const AddProperty = () => {
   const { t } = useTranslation();
   const { toast } = useToast();
@@ -122,15 +129,14 @@ const AddProperty = () => {
 
   const fetchCountries = async () => {
     try {
-      const res = await apiFetch(`${API_BASE}/locations/countries?page=0&size=100"`, {
+      const data = await apiFetch(`${API_BASE}/locations/countries?page=0&size=100"`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
 
       });
-      console.log("Fetch countries response status:", res.status);
-      const json = await res.json();
-      const list = Array.isArray(json.content) ? json.content : [];
+      console.log("Fetch countries response status:", data.status);
+      const list = data?.content ? data.content : (Array.isArray(data) ? data : []);
       setCountries(list);
     } catch (err) {
       console.error("Failed to fetch countries:", err);
