@@ -17,6 +17,8 @@ import {
 export interface PropertyCardProps {
   id: string;
   type: string;
+  title: string;
+  titleAr?: string;
   propertyType: string;
   city: string;
   capital: string;
@@ -40,6 +42,8 @@ const PropertyCard = ({
   id,
   type,
   propertyType,
+  title,
+  titleAr,
   city,
   capital,
   price,
@@ -151,8 +155,8 @@ const handleSpeak = (e: React.MouseEvent) => {
   } else {
     // ⚡ ترجمات نظيفة للإنجليزي
     const propertyTypeTrans = t(`propertyTypes.${propertyType}`) || propertyType || "Not specified";
-    const cityTrans = t(`cities.${city}`) || city || "Unknown city";
-    const capitalTrans = t(`cities.${capital}`) || capital || "Unknown country";
+    const cityTrans = city || "Unknown city";
+    const capitalTrans = capital || "Unknown country";
 
     text = `
       Property Type: ${propertyTypeTrans}.
@@ -205,16 +209,26 @@ const handleSpeak = (e: React.MouseEvent) => {
 };
 
 
+const visibleFieldsByType: Record<string, string[]> = {
+  LAND: ["area"],
+  HOUSE: ["area", "bedrooms", "bathrooms", "parking", "yearBuilt", "furnished"],
+  APARTMENT: ["area", "bedrooms", "bathrooms", "parking", "yearBuilt", "furnished"],
+  OFFICE: ["area", "bathrooms", "parking", "yearBuilt", "furnished"],
+  STORE: ["area", "parking", "yearBuilt"],
+};
+
+const isVisible = (field: string) =>
+  visibleFieldsByType[propertyType]?.includes(field);
 
   return (
     <>
       <Card className="overflow-hidden hover:shadow-elegant transition-smooth group">
-        <div className="relative h-64 overflow-hidden">
-          <img
-            src={images[currentImageIndex]}
-            alt={"error"}
-            className="w-full h-full object-cover group-hover:scale-110 transition-smooth"
-          />
+        <div className="relative h-48 sm:h-56 md:h-64 overflow-hidden">
+         <img
+  src={images.length > 0 ? images[currentImageIndex] : "/placeholder.jpg"}
+  alt="property"
+/>
+
 
           {images.length > 1 && (
             <>
@@ -240,10 +254,10 @@ const handleSpeak = (e: React.MouseEvent) => {
           </div>
 
           {/* Favorite Button */}
-          {/* 
+          
           <button
             onClick={toggleFavorite}
-            className="absolute top-3 left-3 bg-background/90 backdrop-blur-sm p-2 rounded-full hover:bg-background transition-all hover:scale-110"
+            className="absolute top-3 right-3 bg-background/90 backdrop-blur-sm p-2 rounded-full hover:bg-background transition-all hover:scale-110"
           >
             <Heart 
               className={`w-5 h-5 transition-colors ${
@@ -251,43 +265,43 @@ const handleSpeak = (e: React.MouseEvent) => {
               }`} 
             />
           </button>
-           */}
+       
         </div>
 
-        <CardContent className="p-5">
-          <h3 className="text-xl font-bold mb-2 text-foreground">
+        <CardContent className="p-4 sm:p-5">
+          <h3 className="text-lg sm:text-xl font-bold mb-2 text-foreground line-clamp-2">
             {language === "AR" 
-              ? `${propertyType} في ${city}`
-              : `${t(`propertyTypes.${propertyType}`)} in ${t(`cities.${city}`)}`
+              ? (titleAr || title || `${t(`propertyTypes.${propertyType}`) || propertyType} في ${city || ""}`)
+              : (title || titleAr || `${t(`propertyTypes.${propertyType}`)} in ${city || ""}`)
             }
           </h3>
 
           <div className="flex items-center gap-2 text-muted-foreground mb-3">
-            <MapPin className="w-4 h-4" />
-            <span className="text-sm">
+            <MapPin className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" />
+            <span className="text-xs sm:text-sm truncate">
               {language === "AR" 
-                ? `${city}، ${capital}`
-                : `${t(`cities.${city}`)}, ${t(`countries.${capital}`)}`
+                ? `${city || ""}${city && capital ? "، " : ""}${capital || ""}`
+                : `${city || ""}${city && capital ? ", " : ""}${capital || ""}`
               }
             </span>
           </div>
 
           <div className="flex items-center justify-between mb-4">
-            <span className="text-2xl font-bold text-primary">
+            <span className="text-lg sm:text-xl md:text-2xl font-bold text-primary">
               {price.toLocaleString()} {t("propertyCard.priceUnit")}
             </span>
             <button
               onClick={handleSpeak}
-              className="p-2 hover:bg-muted rounded-full transition-smooth"
+              className="p-1.5 sm:p-2 hover:bg-muted rounded-full transition-smooth flex-shrink-0"
             >
-              <Volume2 className="w-5 h-5 text-primary" />
+              <Volume2 className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
             </button>
           </div>
 
-          <div className="flex gap-2">
+          <div className="flex flex-col sm:flex-row gap-2">
             <Button
               variant="default"
-              className="flex-1 gradient-primary"
+              className="flex-1 gradient-primary text-sm sm:text-base"
               onClick={() => setShowDetails(true)}
             >
               {t("propertyCard.details")}
@@ -313,16 +327,22 @@ const handleSpeak = (e: React.MouseEvent) => {
       </Card>
 
       <Dialog open={showDetails} onOpenChange={setShowDetails}>
-        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-[95vw] sm:max-w-4xl max-h-[90vh] overflow-y-auto mx-2 sm:mx-4">
           <DialogHeader>
-            <DialogTitle className="text-2xl">
-              {t("propertyCard.propertyDetails")}
+            <DialogTitle className="text-xl sm:text-2xl mb-2">
+              {language === "AR" 
+                ? (titleAr || title || t("propertyCard.propertyDetails"))
+                : (title || titleAr || t("propertyCard.propertyDetails"))
+              }
             </DialogTitle>
+            <p className="text-sm text-muted-foreground">
+              {t("propertyCard.propertyDetails")}
+            </p>
           </DialogHeader>
 
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             {/* Main media display - video or image */}
-            <div className="relative h-96 rounded-lg overflow-hidden bg-gray-900">
+            <div className="relative h-48 sm:h-64 md:h-96 rounded-lg overflow-hidden bg-gray-900">
               {selectedMediaIndex === 0 && video ? (
                 <video
                   src={video}
@@ -355,7 +375,7 @@ const handleSpeak = (e: React.MouseEvent) => {
 
             {/* Thumbnail gallery */}
             {media.length > 1 && (
-              <div className="grid grid-cols-4 gap-2">
+              <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
                 {media.map((item, index) => (
                   <button
                     key={index}
@@ -387,83 +407,133 @@ const handleSpeak = (e: React.MouseEvent) => {
                 ))}
               </div>
             )}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+  {/* نوع العقار */}
+  <div>
+    <p className="text-xs sm:text-sm text-muted-foreground mb-1">
+      {t("propertyCard.propertyType")}
+    </p>
+    <p className="font-semibold text-sm sm:text-base">
+      {language === "AR"
+        ? propertyType
+        : t(`propertyTypes.${propertyType}`)}
+    </p>
+  </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <p className="text-sm text-muted-foreground mb-1">{t("propertyCard.propertyType")}</p>
-                <p className="font-semibold">
-                  {language === "AR" ? propertyType : t(`propertyTypes.${propertyType}`)}
-                </p>
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground mb-1">{t("propertyCard.offerType")}</p>
-                <Badge className={type === "للبيع" ? "gradient-primary" : "bg-green-500"}>
-                  {language === "AR" ? type : (type === "للبيع" ? t("propertyCard.forSale") : t("propertyCard.forRent"))}
-                </Badge>
-              </div>
+  {/* نوع العرض */}
+  <div>
+    <p className="text-xs sm:text-sm text-muted-foreground mb-1">
+      {t("propertyCard.offerType")}
+    </p>
+    <Badge
+      className={`text-xs sm:text-sm ${
+        type === "للبيع" ? "gradient-primary" : "bg-green-500"
+      }`}
+    >
+      {language === "AR"
+        ? type
+        : type === "للبيع"
+        ? t("propertyCard.forSale")
+        : t("propertyCard.forRent")}
+    </Badge>
+  </div>
 
-              {city && (
-                <div>
-                  <p className="text-sm text-muted-foreground mb-1">{t("propertyCard.location")}</p>
-                  <p className="font-semibold">
-                    {language === "AR" 
-                      ? `${city}, ${capital}`
-                      : `${t(`cities.${city}`)}, ${t(`countries.${capital}`)}`
-                    }
-                  </p>
-                </div>
-              )}
-              {area && (
-                <div>
-                  <p className="text-sm text-muted-foreground mb-1">{t("propertyCard.area")}</p>
-                  <p className="font-semibold">{area} {isRTL ? "م²" : "m²"}</p>
-                </div>
-              )}
-              {bedrooms && (
-                <div>
-                  <p className="text-sm text-muted-foreground mb-1">{t("propertyCard.bedrooms")}</p>
-                  <p className="font-semibold">{bedrooms}</p>
-                </div>
-              )}
-              {bathrooms && (
-                <div>
-                  <p className="text-sm text-muted-foreground mb-1">{t("propertyCard.bathrooms")}</p>
-                  <p className="font-semibold">{bathrooms}</p>
-                </div>
-              )}
-              {parking && (
-                <div>
-                  <p className="text-sm text-muted-foreground mb-1">{t("propertyCard.parking")}</p>
-                  <p className="font-semibold">{parking}</p>
-                </div>
-              )}
-              {yearBuilt && (
-                <div>
-                  <p className="text-sm text-muted-foreground mb-1">{t("propertyCard.yearBuilt")}</p>
-                  <p className="font-semibold">{yearBuilt}</p>
-                </div>
-              )}
-              {furnished !== undefined && (
-                <div>
-                  <p className="text-sm text-muted-foreground mb-1">{t("propertyCard.furnished")}</p>
-                  <p className="font-semibold">{furnished ? t("propertyCard.yes") : t("propertyCard.no")}</p>
-                </div>
-              )}
-            </div>
+  {/* الموقع */}
+  {city && (
+    <div>
+      <p className="text-xs sm:text-sm text-muted-foreground mb-1">
+        {t("propertyCard.location")}
+      </p>
+      <p className="font-semibold text-sm sm:text-base">
+        {language === "AR"
+          ? `${city}${capital ? "، " + capital : ""}`
+          : `${city}${capital ? ", " + capital : ""}`}
+      </p>
+    </div>
+  )}
+
+  {/* المساحة */}
+  {area !== undefined && isVisible("area") && (
+    <div>
+      <p className="text-xs sm:text-sm text-muted-foreground mb-1">
+        {t("propertyCard.area")}
+      </p>
+      <p className="font-semibold text-sm sm:text-base">
+        {area} {isRTL ? "م²" : "m²"}
+      </p>
+    </div>
+  )}
+
+  {/* غرف النوم */}
+  {bedrooms !== undefined && isVisible("bedrooms") && (
+    <div>
+      <p className="text-xs sm:text-sm text-muted-foreground mb-1">
+        {t("propertyCard.bedrooms")}
+      </p>
+      <p className="font-semibold text-sm sm:text-base">{bedrooms}</p>
+    </div>
+  )}
+
+  {/* الحمامات */}
+  {bathrooms !== undefined && isVisible("bathrooms") && (
+    <div>
+      <p className="text-xs sm:text-sm text-muted-foreground mb-1">
+        {t("propertyCard.bathrooms")}
+      </p>
+      <p className="font-semibold text-sm sm:text-base">{bathrooms}</p>
+    </div>
+  )}
+
+  {/* المواقف */}
+  {parking !== undefined && isVisible("parking") && (
+    <div>
+      <p className="text-xs sm:text-sm text-muted-foreground mb-1">
+        {t("propertyCard.parking")}
+      </p>
+      <p className="font-semibold text-sm sm:text-base">{parking}</p>
+    </div>
+  )}
+
+  {/* سنة البناء */}
+  {yearBuilt !== undefined && isVisible("yearBuilt") && (
+    <div>
+      <p className="text-xs sm:text-sm text-muted-foreground mb-1">
+        {t("propertyCard.yearBuilt")}
+      </p>
+      <p className="font-semibold text-sm sm:text-base">{yearBuilt}</p>
+    </div>
+  )}
+
+  {/* مفروش */}
+  {furnished !== undefined && isVisible("furnished") && (
+    <div>
+      <p className="text-xs sm:text-sm text-muted-foreground mb-1">
+        {t("propertyCard.furnished")}
+      </p>
+      <p className="font-semibold text-sm sm:text-base">
+        {furnished ? t("propertyCard.yes") : t("propertyCard.no")}
+      </p>
+    </div>
+  )}
+</div>
+
+
+        
+
 {language === "AR" && arabicDescription && (
-  <p className="text-foreground leading-relaxed">{arabicDescription}</p>
+  <p className="text-sm sm:text-base text-foreground leading-relaxed">{arabicDescription}</p>
 )}
 
 {language === "US" && englishDescription && (
-  <p className="text-foreground leading-relaxed">{englishDescription}</p>
+  <p className="text-sm sm:text-base text-foreground leading-relaxed">{englishDescription}</p>
 )}
 
 
-            <div className="flex items-center justify-between pt-4 border-t">
-              <span className="text-3xl font-bold text-primary">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-4 border-t">
+              <span className="text-2xl sm:text-3xl font-bold text-primary text-center sm:text-left">
                 {price.toLocaleString()} {t("propertyCard.priceUnit")}
               </span>
-              <Button onClick={() => setShowDetails(false)}>
+              <Button onClick={() => setShowDetails(false)} className="w-full sm:w-auto">
                 {t("propertyCard.close")}
               </Button>
             </div>

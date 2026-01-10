@@ -1,0 +1,11 @@
+rules_version = '2';
+// Storage rules - يمكن تحسينها لاحقاً لإضافة authentication
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /{allPaths=**} {
+      // السماح بالقراءة والكتابة للجميع (مؤقتاً للاختبار)
+      // TODO: إضافة authentication checks لاحقاً
+      allow read, write: if true;
+    }
+  }
+}

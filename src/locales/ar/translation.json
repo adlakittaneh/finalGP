@@ -17,23 +17,20 @@
     "placeholder": "ابحث حسب المدينة أو نوع العقار..."
   },
   "categories": {
-    "apartments": "شقق",
-    "villas": "فلل",
-    "shops": "محلات",
-    "offices": "مكاتب",
-    "lands": "أراضٍ"
+    "title":" فئات العقارات",
+    "APARTMENT": "شقق",
+    "HOUSE": "بيوت مستقله",
+    "STORE": "محلات",
+    "OFFICE": "مكاتب",
+    "LAND": "أراضٍ"
   },
   "propertyTypes": {
-    "شقه": "apartment",
-    "فيلا": "villa",
-    "مكتب": "office",
-    "شقق": "apartments",
-    "فلل": "villas",
-    "محل": "shop",
-    "محلات": "shops",
-    "أرض": "land",
-    "أراض": "lands"
-  },
+  "LAND": "أرض",
+  "APARTMENT": "شقة",
+  "HOUSE": "منزل",
+  "OFFICE": "مكتب",
+  "STORE": "محل"
+},
   "cities": {
     "نابلس": "نابلس",
     "رام الله": "رام الله",
@@ -139,7 +136,42 @@
     "total_users": "إجمالي المستخدمين",
     "pending_properties": "العقارات قيد المراجعة",
     "approve": "ارسال",
-    "reject": "الغاء"
+    "reject": "الغاء",
+    "manage_locations": "إدارة الدول والمدن",
+    "add_country": "إضافة دولة جديدة",
+    "add_city": "إضافة مدينة جديدة",
+    "country_name_en": "اسم الدولة بالإنجليزي",
+    "country_name_ar": "اسم الدولة بالعربي",
+    "city_name_en": "اسم المدينة بالإنجليزي",
+    "city_name_ar": "اسم المدينة بالعربي",
+    "select_country": "اختر دولة",
+    "add": "أضف",
+    "no_cities": "لا توجد مدن حالياً",
+    "cities_list": "قائمة المدن",
+    "enter_name_both": "يرجى إدخال الاسم بالإنجليزي والعربي",
+    "country_exists": "الدولة موجودة بالفعل!",
+    "failed_add_country": "فشل إضافة الدولة، حاول مرة أخرى.",
+    "enter_city_both": "يرجى إدخال اسم المدينة بالإنجليزي والعربي",
+    "failed_add_city": "فشل إضافة المدينة، حاول مرة أخرى.",
+    "approved_success": "تم الموافقة على العقار بنجاح",
+    "approve_failed": "فشل الموافقة على العقار",
+    "rejected_success": "تم رفض العقار بنجاح",
+    "reject_failed": "فشل رفض العقار",
+    "confirm_reject": "هل أنت متأكد من رفض هذا العقار؟",
+    "no_pending_properties": "لا توجد عقارات قيد المراجعة حالياً",
+    "countries_list": "قائمة الدول",
+    "confirm_delete_country": "هل أنت متأكد من حذف الدولة \"{{name}}\"؟",
+    "country_deleted_success": "تم حذف الدولة بنجاح",
+    "failed_delete_country": "فشل حذف الدولة، حاول مرة أخرى.",
+    "confirm_delete_city": "هل أنت متأكد من حذف المدينة \"{{name}}\"؟",
+    "city_deleted_success": "تم حذف المدينة بنجاح",
+    "failed_delete_city": "فشل حذف المدينة، حاول مرة أخرى.",
+    "country_has_cities": "لا يمكن حذف الدولة \"{{name}}\" لأنها تحتوي على مدن",
+    "country_has_cities_details": "يجب حذف جميع المدن التابعة لهذه الدولة أولاً قبل حذف الدولة.",
+    "checking_cities": "جاري التحقق من المدن...",
+    "city_has_properties_title": "لا يمكن حذف مدينة {{name}}",
+    "city_has_properties_reason": "هذه المدينة تحتوي على عقارات مرتبطة بها.",
+    "city_has_properties_action": "يرجى حذف العقارات التابعة للمدينة أولًا، ثم إعادة المحاولة."
   },
   "addPropertyPage": {
     "headerTitle": "عقاراتي المنشورة",
@@ -205,6 +237,10 @@
     "apiKeyNote": "ملاحظة: يجب إضافة Google Maps API Key في الملف LocationPickerDialog.tsx",
     "selectedAddress": "العنوان المحدد",
     "confirm": "تأكيد",
-    "cancel": "إلغاء"
+    "cancel": "إلغاء",
+    "gettingCurrentLocation": "جاري الحصول على موقعك الحالي...",
+    "currentLocationRetrieved": "تم الحصول على الموقع الحالي",
+    "locationPermissionDenied": "تم رفض طلب الموقع",
+    "locationPermissionDeniedDesc": "يرجى السماح بالوصول إلى الموقع أو تحديد موقع يدوياً"
   }
 }

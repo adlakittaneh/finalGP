@@ -17,19 +17,19 @@
     "placeholder": "Search by city or property type..."
   },
   "categories": {
-    "apartments": "Apartments",
-    "villas": "Villas",
-    "shops": "Shops",
-    "offices": "Offices",
-    "lands": "Lands"
+    "APARTMENT": "Apartments",
+    "HOUSE": "Houses",
+    "STORE": "Store",
+    "OFFICE": "Office",
+    "LAND": "Land"
   },
-  "propertyTypes": {
-    "مكاتب": "offices",
-    "شقق": "apartments",
-    "فلل": "villas",
-    "محلات": "shops",
-    "أراض": "lands"
-  },
+ "propertyTypes": {
+  "LAND": "Land",
+  "APARTMENT": "Apartment",
+  "HOUSE": "House",
+  "OFFICE": "Office",
+  "STORE": "Store"
+},
   "cities": {
     "نابلس": "Nablus",
     "رام الله": "Ramallah",
@@ -134,7 +134,42 @@
   "total_users": "Total Users",
   "pending_properties": "Pending Properties",
   "approve": "Send",
-  "reject": "Cancel"
+  "reject": "Cancel",
+  "manage_locations": "Manage Countries and Cities",
+  "add_country": "Add New Country",
+  "add_city": "Add New City",
+  "country_name_en": "Country Name (English)",
+  "country_name_ar": "Country Name (Arabic)",
+  "city_name_en": "City Name (English)",
+  "city_name_ar": "City Name (Arabic)",
+  "select_country": "Select Country",
+  "add": "Add",
+  "no_cities": "No cities available",
+  "cities_list": "Cities List",
+  "enter_name_both": "Please enter the name in both English and Arabic",
+  "country_exists": "Country already exists!",
+  "failed_add_country": "Failed to add country, please try again.",
+  "enter_city_both": "Please enter the city name in both English and Arabic",
+  "failed_add_city": "Failed to add city, please try again.",
+  "approved_success": "Property approved successfully",
+  "approve_failed": "Failed to approve property",
+  "rejected_success": "Property rejected successfully",
+  "reject_failed": "Failed to reject property",
+  "confirm_reject": "Are you sure you want to reject this property?",
+  "no_pending_properties": "No properties pending review at the moment",
+  "countries_list": "Countries List",
+  "confirm_delete_country": "Are you sure you want to delete the country \"{{name}}\"?",
+  "country_deleted_success": "Country deleted successfully",
+  "failed_delete_country": "Failed to delete country, please try again.",
+  "confirm_delete_city": "Are you sure you want to delete the city \"{{name}}\"?",
+  "city_deleted_success": "City deleted successfully",
+  "failed_delete_city": "Failed to delete city, please try again.",
+  "country_has_cities": "Cannot delete country \"{{name}}\" because it contains cities",
+  "country_has_cities_details": "You must delete all cities belonging to this country first before deleting the country.",
+  "checking_cities": "Checking cities...",
+  "city_has_properties_title": "Cannot delete {{name}}",
+  "city_has_properties_reason": "This city has properties linked to it.",
+  "city_has_properties_action": "Please delete the city-owned properties first, then try again."
 },
 "addPropertyPage": {
   "headerTitle": "My Published Properties",
@@ -201,6 +236,11 @@
     "apiKeyNote": "Note: You need to add Google Maps API Key in LocationPickerDialog.tsx file",
     "selectedAddress": "Selected Address",
     "confirm": "Confirm",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "gettingCurrentLocation": "Getting your current location...",
+    "currentLocationRetrieved": "Current location retrieved",
+    "locationPermissionDenied": "Location permission denied",
+    "locationPermissionDeniedDesc": "Please allow location access or select a location manually"
   }
+  
 }

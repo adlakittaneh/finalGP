@@ -8,42 +8,42 @@ const Footer = () => {
 
   const { language } = useLanguage();
   return (
-    <footer className="bg-card border-t mt-20">
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+    <footer className="bg-card border-t mt-12 sm:mt-16 md:mt-20">
+      <div className="container mx-auto px-4 py-8 sm:py-10 md:py-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8">
           {/* Logo and Description */}
           <div>
            
-            <p className="text-muted-foreground leading-relaxed">
+            <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
               {t("footer.about_text")}
             </p>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h3 className="font-bold text-lg mb-4">{t("footer.quick_links")}</h3>
+            <h3 className="font-bold text-base sm:text-lg mb-3 sm:mb-4">{t("footer.quick_links")}</h3>
             <div className="space-y-2">
               <Link
                 to="/"
-                className="block text-muted-foreground hover:text-primary transition-smooth"
+                className="block text-sm sm:text-base text-muted-foreground hover:text-primary transition-smooth"
               >
                 {t("navbar.home")}
               </Link>
               <Link
                 to="/favorites"
-                className="block text-muted-foreground hover:text-primary transition-smooth"
+                className="block text-sm sm:text-base text-muted-foreground hover:text-primary transition-smooth"
               >
                 {t("navbar.favorites")}
               </Link>
               <Link
                 to="/add-property"
-                className="block text-muted-foreground hover:text-primary transition-smooth"
+                className="block text-sm sm:text-base text-muted-foreground hover:text-primary transition-smooth"
               >
                 {t("navbar.add_property")}
               </Link>
               <Link
                 to="/dashboard"
-                className="block text-muted-foreground hover:text-primary transition-smooth"
+                className="block text-sm sm:text-base text-muted-foreground hover:text-primary transition-smooth"
               >
                 {t("navbar.dashboard")}
               </Link>
@@ -52,32 +52,32 @@ const Footer = () => {
 
           {/* Social Media */}
           <div>
-            <h3 className="font-bold text-lg mb-4">{t("footer.contact_us")}</h3>
+            <h3 className="font-bold text-base sm:text-lg mb-3 sm:mb-4">{t("footer.contact_us")}</h3>
           
-            <div className="flex gap-3">
+            <div className="flex gap-2 sm:gap-3">
               <a
                 href="#"
-                className="w-10 h-10 rounded-full bg-muted hover:bg-primary hover:text-primary-foreground flex items-center justify-center transition-smooth"
+                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-muted hover:bg-primary hover:text-primary-foreground flex items-center justify-center transition-smooth"
               >
-                <Facebook className="w-5 h-5" />
+                <Facebook className="w-4 h-4 sm:w-5 sm:h-5" />
               </a>
               <a
                 href="#"
-                className="w-10 h-10 rounded-full bg-muted hover:bg-primary hover:text-primary-foreground flex items-center justify-center transition-smooth"
+                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-muted hover:bg-primary hover:text-primary-foreground flex items-center justify-center transition-smooth"
               >
-                <Instagram className="w-5 h-5" />
+                <Instagram className="w-4 h-4 sm:w-5 sm:h-5" />
               </a>
               <a
                 href="#"
-                className="w-10 h-10 rounded-full bg-muted hover:bg-green-500 hover:text-white flex items-center justify-center transition-smooth"
+                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-muted hover:bg-green-500 hover:text-white flex items-center justify-center transition-smooth"
               >
-                <MessageCircle className="w-5 h-5" />
+                <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5" />
               </a>
             </div>
           </div>
         </div>
 
-        <div className="border-t mt-8 pt-8 text-center text-muted-foreground">
+        <div className="border-t mt-6 sm:mt-8 pt-6 sm:pt-8 text-center text-xs sm:text-sm text-muted-foreground">
           <p>{t("footer.rights")}</p>
         </div>
       </div>

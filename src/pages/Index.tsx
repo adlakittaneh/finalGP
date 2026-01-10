@@ -26,6 +26,7 @@ const Index = () => {
       id: "1",
       type: "للبيع",
       propertyType: "شقه",
+      title: "شقة حديثة في نابلس",
       city: "نابلس",
       capital: "فلسطين",
       price: 800,
@@ -47,6 +48,7 @@ const Index = () => {
       id: "2",
       type: "للبيع",
       propertyType: "فيلا",
+      title: "فيلا فاخرة في رام الله",
       city: "رام الله",
       capital: "فلسطين",
       price: 450000,
@@ -66,6 +68,7 @@ const Index = () => {
     {
       id: "3",
       type: "للإيجار",
+      title: "مكتب مجهز في غزة",
       propertyType: "مكتب",
       city: "غزة",
       capital: "فلسطين",
@@ -89,7 +92,7 @@ const Index = () => {
       <ChatButton />
 
       {/* Hero Section */}
-      <section className="relative h-[600px] flex items-center justify-center overflow-hidden">
+      <section className="relative h-[400px] sm:h-[500px] md:h-[600px] flex items-center justify-center overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: `url(${background})` }}
@@ -97,24 +100,24 @@ const Index = () => {
           <div className="absolute inset-0 bg-black/70" />
         </div>
 
-        <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
-          <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">
+        <div className="relative z-10 text-center px-4 max-w-4xl mx-auto w-full">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 sm:mb-6 px-2">
             {t("hero.title")}
           </h1>
-          <p className="text-xl text-white/90 mb-8">
+          <p className="text-base sm:text-lg md:text-xl text-white/90 mb-6 sm:mb-8 px-2">
             {t("hero.subtitle")}
           </p>
 
           {/* Search Box */}
-         <div className="bg-card/95 backdrop-blur-md rounded-2xl p-4 shadow-elegant max-w-2xl mx-auto">
-  <div className="flex gap-3 items-center">
-    <div className="relative flex-1">
+         <div className="bg-card/95 backdrop-blur-md rounded-2xl p-3 sm:p-4 shadow-elegant max-w-2xl mx-auto">
+  <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
+    <div className="relative flex-1 w-full">
       <Input
         type="text"
         placeholder={t("hero.placeholder")}
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
-        className="w-full h-12 text-lg pr-12"
+        className="w-full h-10 sm:h-12 text-base sm:text-lg pr-10 sm:pr-12"
       />
       {/* أيقونة الميكروفون */}
 
@@ -147,8 +150,8 @@ const Index = () => {
 
     </div>
 
-    <Button size="lg" className="gradient-primary px-8">
-      <Search className={`w-5 h-5 ${isRTL ? "mr-2" : "ml-2"}`} />
+    <Button size="lg" className="gradient-primary px-4 sm:px-8 w-full sm:w-auto">
+      <Search className={`w-4 h-4 sm:w-5 sm:h-5 ${isRTL ? "mr-2" : "ml-2"}`} />
       {t("hero.search")}
     </Button>
   </div>
@@ -157,18 +160,19 @@ const Index = () => {
       </section>
 
       {/* Categories Section */}
-     <section className="py-16 bg-gray-50">
-  <h2 className="text-3xl font-bold text-center text-[#0d3d7f] mb-10">
-    {t("categories.title", "Browse by Property Type")}
-  </h2>
+     <section className="py-8 sm:py-12 md:py-16 bg-gray-50">
+  <div className="container mx-auto px-4">
+    <h2 className="text-2xl sm:text-3xl font-bold text-center text-[#0d3d7f] mb-6 sm:mb-8 md:mb-10">
+      {t("categories.title", "Browse by Property Type")}
+    </h2>
 
- <div className="flex flex-wrap justify-center gap-16">
+ <div className="flex flex-wrap justify-center gap-6 sm:gap-10 md:gap-16">
   {[
-    { name: t("categories.apartments"), path: "/properties/apartments", img: "/icons/apartment.jpg" },
-    { name: t("categories.villas"), path: "/properties/villas", img: "/icons/villa.jpg" },
-    { name: t("categories.shops"), path: "/properties/shops", img: "/icons/shop.jpg" },
-    { name: t("categories.offices"), path: "/properties/offices", img: "/icons/office.jpg" },
-    { name: t("categories.lands"), path: "/properties/lands", img: "/icons/land.jpg" },
+    { name: t("categories.APARTMENT"), path: "/properties/apartments", img: "/icons/apartment.jpg" },
+    { name: t("categories.HOUSE"), path: "/properties/villas", img: "/icons/villa.jpg" },
+    { name: t("categories.STORE"), path: "/properties/shops", img: "/icons/shop.jpg" },
+    { name: t("categories.OFFICE"), path: "/properties/offices", img: "/icons/office.jpg" },
+    { name: t("categories.LAND"), path: "/properties/lands", img: "/icons/land.jpg" },
   ].map((category) => (
     <Link
       key={category.name}
@@ -176,7 +180,7 @@ const Index = () => {
       className="flex flex-col items-center group"
     >
       <div
-        className="w-36 h-36 flex items-center justify-center rounded-full bg-[#13478f] shadow-md 
+        className="w-24 h-24 sm:w-32 sm:h-32 md:w-36 md:h-36 flex items-center justify-center rounded-full bg-[#13478f] shadow-md 
         transition-all duration-300 group-hover:scale-110 group-hover:shadow-2xl overflow-hidden"
       >
         <img
@@ -186,30 +190,30 @@ const Index = () => {
         />
       </div>
 
-      <span className="mt-4 text-xl font-semibold text-gray-700 group-hover:text-[#13478f] transition-colors duration-300">
+      <span className="mt-3 sm:mt-4 text-base sm:text-lg md:text-xl font-semibold text-gray-700 group-hover:text-[#13478f] transition-colors duration-300 text-center">
         {category.name}
       </span>
     </Link>
   ))}
 </div>
-
+</div>
 </section>
 
       {/* Features Section */}
-      <section className="py-20 bg-muted/30">
+      <section className="py-12 sm:py-16 md:py-20 bg-muted/30">
   <div className="container mx-auto px-4">
-    <h3 className="text-3xl font-bold text-center mb-12">
+    <h3 className="text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-10 md:mb-12">
       {t("features.title")}
     </h3>
 
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8 max-w-6xl mx-auto">
 
       {/* بطاقة 1 */}
-      <div className="bg-white shadow-md rounded-2xl p-8 text-center hover:shadow-xl transition">
+      <div className="bg-white shadow-md rounded-2xl p-6 sm:p-8 text-center hover:shadow-xl transition">
         <div className="flex justify-center mb-4">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="w-14 h-14 text-primary"
+            className="w-12 h-12 sm:w-14 sm:h-14 text-primary"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -223,20 +227,20 @@ const Index = () => {
           </svg>
         </div>
 
-        <h4 className="font-bold text-xl mb-2">
+        <h4 className="font-bold text-lg sm:text-xl mb-2">
           {t("features.easy.title")}
         </h4>
-        <p className="text-muted-foreground">
+        <p className="text-sm sm:text-base text-muted-foreground">
           {t("features.easy.text")}
         </p>
       </div>
 
       {/* بطاقة 2 */}
-      <div className="bg-white shadow-md rounded-2xl p-8 text-center hover:shadow-xl transition">
+      <div className="bg-white shadow-md rounded-2xl p-6 sm:p-8 text-center hover:shadow-xl transition">
         <div className="flex justify-center mb-4">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="w-14 h-14 text-primary"
+            className="w-12 h-12 sm:w-14 sm:h-14 text-primary"
             viewBox="0 0 24 24"
             fill="currentColor"
           >
@@ -244,20 +248,20 @@ const Index = () => {
           </svg>
         </div>
 
-        <h4 className="font-bold text-xl mb-2">
+        <h4 className="font-bold text-lg sm:text-xl mb-2">
           {t("features.safe.title")}
         </h4>
-        <p className="text-muted-foreground">
+        <p className="text-sm sm:text-base text-muted-foreground">
           {t("features.safe.text")}
         </p>
       </div>
 
       {/* بطاقة 3 */}
-      <div className="bg-white shadow-md rounded-2xl p-8 text-center hover:shadow-xl transition">
+      <div className="bg-white shadow-md rounded-2xl p-6 sm:p-8 text-center hover:shadow-xl transition sm:col-span-2 md:col-span-1">
         <div className="flex justify-center mb-4">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="w-14 h-14 text-primary"
+            className="w-12 h-12 sm:w-14 sm:h-14 text-primary"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -271,10 +275,10 @@ const Index = () => {
           </svg>
         </div>
 
-        <h4 className="font-bold text-xl mb-2">
+        <h4 className="font-bold text-lg sm:text-xl mb-2">
           {t("features.support.title")}
         </h4>
-        <p className="text-muted-foreground">
+        <p className="text-sm sm:text-base text-muted-foreground">
           {t("features.support.text")}
         </p>
       </div>
@@ -285,13 +289,13 @@ const Index = () => {
 
 
       {/* Properties Section */}
-      <section className="py-20">
+      <section className="py-12 sm:py-16 md:py-20">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold mb-4">{t("propertiesSection.title")}</h2>
+          <div className="text-center mb-8 sm:mb-10 md:mb-12">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">{t("propertiesSection.title")}</h2>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {sampleProperties.map((property) => (
               <PropertyCard key={property.id} {...property} />
             ))}

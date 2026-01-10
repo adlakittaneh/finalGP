@@ -14,16 +14,16 @@ const ChatButton = () => {
   }
 
   return (
-    <Link to="/contact" className="fixed bottom-6 z-50">
+    <Link to="/contact" className="fixed bottom-4 sm:bottom-6 z-50">
       <Button
         size="lg"
-        className={`h-14 w-14 rounded-full shadow-2xl hover:scale-110 transition-all duration-300 gradient-primary ${
-          isRTL ? "right-8" : "left-8"
+        className={`h-12 w-12 sm:h-14 sm:w-14 rounded-full shadow-2xl hover:scale-110 transition-all duration-300 gradient-primary ${
+          isRTL ? "right-4 sm:right-8" : "left-4 sm:left-8"
         }`}
         style={{ boxShadow: "0 8px 30px rgba(20, 71, 147, 0.3)" }}
         title="تواصل معنا"
       >
-        <MessageCircle className="w-6 h-6" />
+        <MessageCircle className="w-5 h-5 sm:w-6 sm:h-6" />
       </Button>
     </Link>
   );

@@ -15,14 +15,14 @@ const Contact = () => {
     <div className="min-h-screen flex flex-col">
       <Navbar />
 
-      <main className="flex-1 py-12">
+      <main className="flex-1 py-8 sm:py-10 md:py-12">
         <div className="container mx-auto px-4 max-w-6xl">
-          <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold mb-4">{t("contact.title")}</h1>
-            <p className="text-xl text-muted-foreground">{t("contact.subtitle")}</p>
+          <div className="text-center mb-8 sm:mb-10 md:mb-12">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">{t("contact.title")}</h1>
+            <p className="text-base sm:text-lg md:text-xl text-muted-foreground">{t("contact.subtitle")}</p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
             {/* Contact Form */}
             <Card className="shadow-card">
               <CardHeader>

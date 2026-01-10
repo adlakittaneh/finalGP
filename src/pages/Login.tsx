@@ -12,7 +12,8 @@ import { ToastContainer, toast } from "react-toastify";
 import OTPDialog from "@/components/OTPDialog";
 import { useLanguage } from "@/context/LanguageContext";
 import { useAuth } from "@/context/AuthContext";
-
+import { API_BASE } from "./config/api";
+import { apiFetch } from "../api/apiFetch";
 const Login = () => {
   const { t } = useTranslation();
   const { language } = useLanguage();
@@ -32,49 +33,43 @@ const Login = () => {
   const [phoneError, setPhoneError] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
 
- const handleLoginSubmit = async (e: React.FormEvent) => {
+const handleLoginSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
   console.log("Login:", { loginEmail, loginPassword });
 
   try {
-    const response = await fetch("http://easyaqar.org/api/auth/login", {
+    // تسجيل الدخول
+    const data = await apiFetch(`${API_BASE}/auth/login`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
       body: JSON.stringify({
         email: loginEmail,
-        password: loginPassword
+        password: loginPassword,
       }),
     });
 
-    const data = await response.json();
-    console.log("Response data:", data);
-
-    if (!response.ok) {
-      toast.error("فشل تسجيل الدخول، تحقق من البريد وكلمة المرور.");
-      return;
-    }
+    console.log("Login response data:", data);
 
     toast.success("تم تسجيل الدخول بنجاح!");
-    const resp = await fetch("http://easyaqar.org/api/auth/me", {
+
+    // جلب بيانات المستخدم الحالية
+    const userData = await apiFetch(`${API_BASE}/auth/me`, {
       method: "GET",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
     });
 
-    const userData = await resp.json();//current user data
     login(userData);
     console.log("User data:", userData);
-localStorage.setItem("user", JSON.stringify(userData));
-localStorage.setItem("isAuthenticated", "true");
+
+    localStorage.setItem("user", JSON.stringify(userData));
+    localStorage.setItem("isAuthenticated", "true");
 
     navigate("/");
 
   } catch (error) {
     console.error("Login error:", error);
-    toast.error("حدث خطأ في الاتصال بالخادم");
+    toast.error("فشل تسجيل الدخول أو حدث خطأ في الاتصال بالخادم");
   }
 };
+
 
 
 const parseCookiesFromHeader = (setCookieHeader: string) => {
@@ -176,66 +171,61 @@ const getCookie = (name: string): string | null => {
 
   return null;
 };
-  const handleSignupSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setPasswordError("");
-    setPhoneError("");
-    setConfirmPasswordError("");
+ const handleSignupSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setPasswordError("");
+  setPhoneError("");
+  setConfirmPasswordError("");
 
-    if (phoneNumber.length !== 10) {
-      setPhoneError("رقم الهاتف غير صالح , اعد المحاولة");
-      return;
-    }
-    if (signupPassword.length < 6) {
+  // التحقق من صحة البيانات
+  if (phoneNumber.length !== 10) {
+    setPhoneError("رقم الهاتف غير صالح , اعد المحاولة");
+    return;
+  }
+  if (signupPassword.length < 6) {
     setPasswordError("كلمة المرور يجب أن تكون على الأقل 6 خانات.");
     return;
   }
-    if (signupPassword !== confirmPassword) {
-      setConfirmPasswordError("كلمة المرور وتأكيدها غير متطابقين.");
-      return;
+  if (signupPassword !== confirmPassword) {
+    setConfirmPasswordError("كلمة المرور وتأكيدها غير متطابقين.");
+    return;
+  }
+
+  try {
+    // إنشاء الحساب
+    const data = await apiFetch(`${API_BASE}/auth/signup`, {
+      method: "POST",
+      body: JSON.stringify({
+        email: signupEmail,
+        password: signupPassword,
+        firstName: signupFirstName,
+        lastName: signupLastName,
+        phoneNumber: phoneNumber,
+      }),
+    });
+
+    console.log("Signup response:", data);
+
+    setOtpOpen(true);
+    toast.success("تم إنشاء الحساب بنجاح!");
+
+  } catch (error: any) {
+    // التعامل مع خطأ المستخدم موجود مسبقاً
+    if (Array.isArray(error) && error[0]?.errorCode === "USER_ALREADY_EXISTS") {
+      toast.error("الإيميل هذا مستخدم بالفعل، يرجى تجربة إيميل آخر.");
+    } else {
+      toast.error(error.message || "حدث خطأ أثناء إنشاء الحساب");
     }
+  }
+};
 
-
-
-    try {
-      const response = await fetch(
-        "http://easyaqar.org/api/auth/signup",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            email: signupEmail,
-            password: signupPassword,
-            firstName: signupFirstName,
-            lastName: signupLastName,
-            phoneNumber: phoneNumber,
-          }),
-        }
-      );
-
-      const data = await response.json();
-      if (!response.ok) {
-        if (response.status === 409) {
-          throw [{ errorCode: "USER_ALREADY_EXISTS", message: "User already exists" }];
-        }
-      }
-      setOtpOpen(true);
-      toast.success("تم إنشاء الحساب بنجاح!");
-    } catch (error: any) {
-      if (error[0].errorCode === "USER_ALREADY_EXISTS") {
-        toast.error("الإيميل هذا مستخدم بالفعل، يرجى تجربة إيميل آخر.");
-      } else {
-        toast.error(error.message || "حدث خطأ أثناء إنشاء الحساب");
-      }
-    }
-  };
 
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-muted/30 to-background p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-muted/30 to-background p-4 sm:p-6">
       <Card className="w-full max-w-md shadow-elegant">
-        <CardHeader className="text-center space-y-4">
-          <CardTitle className="text-3xl font-bold">{t("login.welcome")}</CardTitle>
+        <CardHeader className="text-center space-y-3 sm:space-y-4">
+          <CardTitle className="text-2xl sm:text-3xl font-bold">{t("login.welcome")}</CardTitle>
         </CardHeader>
 
         <CardContent>
@@ -246,7 +236,7 @@ const getCookie = (name: string): string | null => {
             </TabsList>
 
             {/* Login Tab */}
-            <TabsContent value="login" className="space-y-6">
+            <TabsContent value="login" className="space-y-4 sm:space-y-6">
               <form onSubmit={handleLoginSubmit} className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="login-email">{t("login.email")}</Label>
@@ -257,6 +247,7 @@ const getCookie = (name: string): string | null => {
                     value={loginEmail}
                     onChange={(e) => setLoginEmail(e.target.value)}
                     required
+                    className="text-sm sm:text-base"
                   />
                 </div>
 
@@ -269,6 +260,7 @@ const getCookie = (name: string): string | null => {
                     value={loginPassword}
                     onChange={(e) => setLoginPassword(e.target.value)}
                     required
+                    className="text-sm sm:text-base"
                   />
                 </div>
 
@@ -279,9 +271,9 @@ const getCookie = (name: string): string | null => {
             </TabsContent>
 
             {/* Signup Tab */}
-            <TabsContent value="signup" className="space-y-6">
+            <TabsContent value="signup" className="space-y-4 sm:space-y-6">
               <form onSubmit={handleSignupSubmit} className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="firstName">{t("login.firstName")}</Label>
                     <Input
@@ -291,6 +283,7 @@ const getCookie = (name: string): string | null => {
                       value={signupFirstName}
                       onChange={(e) => setSignupFirstName(e.target.value)}
                       required
+                      className="text-sm sm:text-base"
                     />
                   </div>
 
@@ -303,6 +296,7 @@ const getCookie = (name: string): string | null => {
                       value={signupLastName}
                       onChange={(e) => setSignupLastName(e.target.value)}
                       required
+                      className="text-sm sm:text-base"
                     />
                   </div>
                 </div>
@@ -316,6 +310,7 @@ const getCookie = (name: string): string | null => {
                     value={signupEmail}
                     onChange={(e) => setSignupEmail(e.target.value)}
                     required
+                    className="text-sm sm:text-base"
                   />
                 </div>
 
@@ -327,10 +322,10 @@ const getCookie = (name: string): string | null => {
                     placeholder={t("login.passwordPlaceholder")}
                     value={signupPassword}
                     onChange={(e) => setSignupPassword(e.target.value)}
-                    className={passwordError ? "border-red-500 focus-visible:ring-red-500" : ""}
+                    className={`text-sm sm:text-base ${passwordError ? "border-red-500 focus-visible:ring-red-500" : ""}`}
 
                   />
-                  {passwordError && <p className="text-red-500 text-sm">{passwordError}</p>}
+                  {passwordError && <p className="text-red-500 text-xs sm:text-sm">{passwordError}</p>}
                 </div>
 
 
@@ -342,9 +337,9 @@ const getCookie = (name: string): string | null => {
                     placeholder={t("login.passwordPlaceholder")}
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    className={confirmPasswordError ? "border-red-500 focus-visible:ring-red-500" : ""}
+                    className={`text-sm sm:text-base ${confirmPasswordError ? "border-red-500 focus-visible:ring-red-500" : ""}`}
                   />
-                  {confirmPasswordError && <p className="text-red-500 text-sm">{confirmPasswordError}</p>}
+                  {confirmPasswordError && <p className="text-red-500 text-xs sm:text-sm">{confirmPasswordError}</p>}
                 </div>
 
 
@@ -356,9 +351,9 @@ const getCookie = (name: string): string | null => {
                     placeholder="0599999999"
                     value={phoneNumber}
                     onChange={(e) => setPhoneNumber(e.target.value)}
-                    className={phoneError ? "border-red-500 focus-visible:ring-red-500" : ""}
+                    className={`text-sm sm:text-base ${phoneError ? "border-red-500 focus-visible:ring-red-500" : ""}`}
                   />
-                  {phoneError && <p className="text-red-500 text-sm">{phoneError}</p>}
+                  {phoneError && <p className="text-red-500 text-xs sm:text-sm">{phoneError}</p>}
                 </div>
 
 
@@ -382,23 +377,20 @@ const getCookie = (name: string): string | null => {
         open={otpOpen}
         onClose={() => setOtpOpen(false)}
         email={signupEmail}
-        onConfirm={async (code: string) => {
-          try {
-            const res = await fetch(
-              "http://easyaqar.org/api/auth/verify-otp",
-              {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email: signupEmail, verificationCode: code }),
-              }
-            );
+       onConfirm={async (code: string) => {
+  try {
+    await apiFetch(`${API_BASE}/auth/verify-otp`, {
+      method: "POST",
+      body: JSON.stringify({ email: signupEmail, verificationCode: code }),
+    });
 
-            if (!res.ok) throw new Error("رمز التحقق غير صحيح ");
-            setOtpOpen(false);
-          } catch (err: any) {
-            toast.error(err.message);
-          }
-        }}
+    setOtpOpen(false);
+
+  } catch (err: any) {
+    toast.error(err.message || "رمز التحقق غير صحيح");
+  }
+}}
+
       />
 
     </div>

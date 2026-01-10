@@ -87,26 +87,26 @@ const Favorites = () => {
       <Navbar />
       <ChatButton />
 
-      <main className="flex-1 py-12">
+      <main className="flex-1 py-8 sm:py-10 md:py-12">
         <div className="container mx-auto px-4">
-          <div className="flex items-center gap-3 mb-8">
-            <Heart className="w-8 h-8 text-red-500 fill-red-500" />
-            <h1 className="text-4xl font-bold">{t("navbar.favorites")}</h1>
+          <div className="flex items-center gap-2 sm:gap-3 mb-6 sm:mb-8">
+            <Heart className="w-6 h-6 sm:w-8 sm:h-8 text-red-500 fill-red-500" />
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold">{t("navbar.favorites")}</h1>
           </div>
 
           {favoriteProperties.length > 0 ? (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {favoriteProperties.map((property) => (
                 <PropertyCard key={property.id} {...property} />
               ))}
             </div>
           ) : (
-            <div className="text-center py-20">
-              <Heart className="w-20 h-20 mx-auto mb-4 text-muted-foreground" />
-              <h2 className="text-2xl font-semibold mb-2">
+            <div className="text-center py-12 sm:py-16 md:py-20">
+              <Heart className="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-3 sm:mb-4 text-muted-foreground" />
+              <h2 className="text-xl sm:text-2xl font-semibold mb-2">
                 {t("favorites.no_properties")}
               </h2>
-              <p className="text-muted-foreground">
+              <p className="text-sm sm:text-base text-muted-foreground px-4">
                 {t("favorites.start_adding")}
               </p>
             </div>
