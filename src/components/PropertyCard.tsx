@@ -1,4 +1,4 @@
-import i18next from "i18next";
+ import i18next from "i18next";
 import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -6,14 +6,16 @@ import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/context/LanguageContext";
 import { MapPin, Volume2, ChevronLeft, ChevronRight, Pencil, Trash2, Heart } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import nablusVideo from "@/assets/nablus.mp4";
+import { apiFetch } from "../api/apiFetch";
+import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-
 export interface PropertyCardProps {
   id: string;
   type: string;
@@ -36,9 +38,13 @@ export interface PropertyCardProps {
   showActions?: boolean;
   onEdit?: () => void;
   onDelete?: () => void;
+  onToggleFavorite?: () => void;
+
+   mediaFromAPI?: { id: number; mediaUrl: string }[]; 
 }
 
-const PropertyCard = ({
+const PropertyCard = (
+  {
   id,
   type,
   propertyType,
@@ -60,61 +66,105 @@ const PropertyCard = ({
   showActions = false,
   onEdit,
   onDelete,
+   mediaFromAPI,
 }: PropertyCardProps) => {
+  const API_BASE = "http://easyaqar.org/api";
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [selectedMediaIndex, setSelectedMediaIndex] = useState(0);
   const [showDetails, setShowDetails] = useState(false);
   const { language } = useLanguage();
   const { t } = useTranslation();
   const isRTL = language === "AR";
+  const navigate = useNavigate();
+
 
   // Combine video and images for display
-  const media = video ? [video, ...images] : images;
+const media: { src: string; type: "image" | "video" }[] = [
+  ...(mediaFromAPI?.filter(item => item.mediaUrl).map(item => ({
+    src: item.mediaUrl,
+    type: item.mediaUrl.endsWith(".mp4") ? "video" : "image" as "video" | "image",
+  })) || []),
+  ...(video ? [{ type: "video" as "video" | "image", src: video }] : []),
+  ...((images || []).filter(Boolean).map(img => ({ type: "image" as "video" | "image", src: img })))
+];
 
-  // Get favorites from localStorage
-  const getFavoritesFromStorage = (): string[] => {
-    const favorites = localStorage.getItem('favoriteProperties');
-    return favorites ? JSON.parse(favorites) : [];
-  };
+  const currentMedia =
+  media.length > 0
+    ? media[Math.min(currentImageIndex, media.length - 1)]
+    : null;
 
   // Initialize favorite state based on whether this property is in favorites
   const [isFavorite, setIsFavorite] = useState(false);
 
-  // Check if property is favorite on mount
-  useEffect(() => {
-    const favorites = getFavoritesFromStorage();
-    setIsFavorite(favorites.includes(id));
-  }, [id]);
+ useEffect(() => {
+  const checkIfFavorite = async () => {
+    try {
+      const res = await apiFetch(`${API_BASE}/favorites?pageable.page=0&pageable.size=50`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = res.content ? res : await res.json();
 
-  const toggleFavorite = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    
-    const favorites = getFavoritesFromStorage();
-    let updatedFavorites: string[];
-    
-    if (isFavorite) {
-      // Remove from favorites
-      updatedFavorites = favorites.filter(favId => favId !== id);
-    } else {
-      // Add to favorites
-      updatedFavorites = [...favorites, id];
+      const isFav = data.content?.some(
+        (item: any) => item.id === Number(id)
+      );
+
+      setIsFavorite(isFav);
+    } catch (error) {
+      console.error("Failed to load favorites", error);
     }
-    
-    localStorage.setItem('favoriteProperties', JSON.stringify(updatedFavorites));
-    setIsFavorite(!isFavorite);
-    
-    console.log("Updated favorites:", updatedFavorites);
   };
 
-  const nextImage = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setCurrentImageIndex((prev) => (prev + 1) % images.length);
-  };
+  checkIfFavorite();
+}, [id]);
 
-  const prevImage = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
-  };
+const toggleFavorite = async (e: React.MouseEvent) => {
+  try {
+    const method = isFavorite ? "DELETE" : "POST";
+    console.log(method, id);
+
+    const res = await apiFetch(`${API_BASE}/favorites/${id}`, {
+      method,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!res.ok && res.json) {
+      const errorData = await res.json();
+      console.error("Failed to toggle favorite", errorData);
+      toast.error(t("Favorites.err")); 
+      return;
+    }
+
+  
+    if (method === "POST") {
+      toast.success(t("Favorites.successMsg"));
+
+    } else {
+      toast.success(t("Favorites.removeMsg"));
+    }
+      setIsFavorite(!isFavorite);
+  } catch (error) {
+    console.error("Error toggling favorite", error);
+    toast.error(t("Favorites.err")); 
+  }
+};
+
+
+const nextImage = (e: React.MouseEvent) => {
+  e.stopPropagation();
+  setCurrentImageIndex((prev) => (prev + 1) % media.length);
+};
+
+const prevImage = (e: React.MouseEvent) => {
+  e.stopPropagation();
+  setCurrentImageIndex((prev) => (prev - 1 + media.length) % media.length);
+};
+
+
 
   const [isSpeaking, setIsSpeaking] = useState(false);
 
@@ -132,7 +182,7 @@ const handleSpeak = (e: React.MouseEvent) => {
   let langCode = "ar-SA";
 
   if (language === "AR") {
-    // ⚡ أسماء مرتبة حتى ما ترجع "غير محدد"
+    //  أسماء مرتبة حتى ما ترجع "غير محدد"
     const propertyTypeName = propertyType || "غير محدد";
     const offerType = type || "غير محدد";
     const cityName = city || "غير محددة";
@@ -220,17 +270,41 @@ const visibleFieldsByType: Record<string, string[]> = {
 const isVisible = (field: string) =>
   visibleFieldsByType[propertyType]?.includes(field);
 
+
+
   return (
     <>
       <Card className="overflow-hidden hover:shadow-elegant transition-smooth group">
         <div className="relative h-48 sm:h-56 md:h-64 overflow-hidden">
-         <img
-  src={images.length > 0 ? images[currentImageIndex] : "/placeholder.jpg"}
-  alt="property"
-/>
+    {currentMedia ? (
+  currentMedia.type === "video" ? (
+    <video
+      src={currentMedia.src}
+      muted
+      playsInline
+      preload="metadata"
+      className="w-full h-full object-cover"
+    />
+  ) : (
+    <img
+      src={currentMedia.src}
+      alt="property"
+      className="w-full h-full object-cover"
+    />
+  )
+) : (
+  <div className="w-full h-full flex items-center justify-center bg-gray-200">
+    <span>No media available</span>
+  </div>
+)}
 
 
-          {images.length > 1 && (
+
+
+         
+
+        
+          {media.length > 1 && (
             <>
               <button
                 onClick={prevImage}
@@ -246,7 +320,6 @@ const isVisible = (field: string) =>
               </button>
             </>
           )}
-
           <div className={`absolute top-3 ${isRTL ? "right-3" : "left-3"}`}>
             <Badge className={type === "للبيع" ? "gradient-primary" : "bg-green-500"}>
               {language === "AR" ? type : (type === "للبيع" ? t("propertyCard.forSale") : t("propertyCard.forRent"))}
@@ -255,16 +328,25 @@ const isVisible = (field: string) =>
 
           {/* Favorite Button */}
           
-          <button
-            onClick={toggleFavorite}
-            className="absolute top-3 right-3 bg-background/90 backdrop-blur-sm p-2 rounded-full hover:bg-background transition-all hover:scale-110"
-          >
-            <Heart 
-              className={`w-5 h-5 transition-colors ${
-                isFavorite ? "fill-red-500 text-red-500" : "text-gray-600"
-              }`} 
-            />
-          </button>
+         <button
+      onClick={toggleFavorite}
+      className={`
+        absolute top-3
+        ${isRTL ? "left-3" : "right-3"}
+        bg-background/90 backdrop-blur-sm
+        p-2 rounded-full
+        hover:bg-background
+        transition-all hover:scale-110
+      `}
+    >
+      <Heart
+        className={`w-5 h-5 transition-colors ${
+          isFavorite
+            ? "fill-red-500 text-red-500"
+            : "text-gray-600"
+        }`}
+      />
+    </button>
        
         </div>
 
@@ -343,19 +425,28 @@ const isVisible = (field: string) =>
           <div className="space-y-4 sm:space-y-6">
             {/* Main media display - video or image */}
             <div className="relative h-48 sm:h-64 md:h-96 rounded-lg overflow-hidden bg-gray-900">
-              {selectedMediaIndex === 0 && video ? (
-                <video
-                  src={video}
-                  controls
-                  className="w-full h-full object-contain"
-                />
-              ) : (
-                <img
-                  src={media[selectedMediaIndex]}
-                  alt="property"
-                  className="w-full h-full object-cover"
-                />
-              )}
+      {media[selectedMediaIndex] ? (
+  media[selectedMediaIndex].type === "video" ? (
+    <video
+      src={media[selectedMediaIndex].src}
+      controls
+      className="w-full h-full object-contain"
+    />
+  ) : (
+    <img
+      src={media[selectedMediaIndex].src}
+      alt="property"
+      className="w-full h-full object-cover"
+    />
+  )
+) : (
+  <div className="w-full h-full flex items-center justify-center bg-gray-200">
+    <span>No media available</span>
+  </div>
+)}
+
+
+
 
               {/* Media indicator dots */}
               {media.length > 1 && (
@@ -374,39 +465,46 @@ const isVisible = (field: string) =>
             </div>
 
             {/* Thumbnail gallery */}
-            {media.length > 1 && (
-              <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
-                {media.map((item, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setSelectedMediaIndex(index)}
-                    className={`relative aspect-square rounded-lg overflow-hidden border-2 transition-all ${
-                      index === selectedMediaIndex ? "border-primary" : "border-transparent hover:border-primary/50"
-                    }`}
-                  >
-                    {index === 0 && video ? (
-                      <>
-                        <video
-                          src={item}
-                          className="w-full h-full object-cover"
-                        />
-                        <div className="absolute inset-0 flex items-center justify-center bg-black/40">
-                          <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M8 5v14l11-7z"/>
-                          </svg>
-                        </div>
-                      </>
-                    ) : (
-                      <img
-                        src={item}
-                        alt={`thumbnail ${index}`}
-                        className="w-full h-full object-cover"
-                      />
-                    )}
-                  </button>
-                ))}
-              </div>
-            )}
+     {media.length > 1 && (
+  <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
+    {media.filter(Boolean).map((item, index) => (
+      <button
+        key={index}
+        onClick={() => setSelectedMediaIndex(index)}
+        className={`relative aspect-square rounded-lg overflow-hidden border-2 transition-all ${
+          index === selectedMediaIndex
+            ? "border-primary"
+            : "border-transparent hover:border-primary/50"
+        }`}
+      >
+        {item?.type === "video" ? (
+          <>
+            <video src={item.src} className="w-full h-full object-cover" />
+            <div className="absolute inset-0 flex items-center justify-center bg-black/40">
+              <svg
+                className="w-8 h-8 text-white"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path d="M8 5v14l11-7z" />
+              </svg>
+            </div>
+          </>
+        ) : (
+          <img
+            src={item?.src}
+            alt={`thumbnail ${index}`}
+            className="w-full h-full object-cover"
+          />
+        )}
+      </button>
+    ))}
+  </div>
+)}
+
+
+
+
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
   {/* نوع العقار */}
   <div>
@@ -544,4 +642,4 @@ const isVisible = (field: string) =>
   );
 };
 
-export default PropertyCard;
+export default PropertyCard;  

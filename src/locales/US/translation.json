@@ -56,26 +56,15 @@
   "قطر": "Qatar",
   "الكويت": "Kuwait"
 },
-
-  "features": {
-    "title": "Our Features",
-    "easy": {
-      "title": "Easy Search",
-      "text": "Find your property in seconds"
-    },
-    "safe": {
-      "title": "Safe and Trusted",
-      "text": "All listed properties are verified and trusted"
-    },
-    "support": {
-      "title": "Continuous Support",
-      "text": "Our team is always ready to help you"
-    }
-  },
   "propertiesSection": {
     "title": "Featured Properties"
   },
   "propertyCard": {
+    "from": "From",
+    "to": "To",
+    "cityHint":"e.g., Nablus",
+    "Search filtering": "Search filtering",
+    "search": "Search",
     "details": "Details",
     "close": "Close",
     "propertyType": "Property Type",
@@ -124,6 +113,8 @@
     }
   },
   "favorites": {
+    "successMsg":"Property added to favorites successfully",
+    "removeMsg":"Property removed from favorites successfully",
   "page_title": "Favorites",
   "no_properties": "No favorite properties",
   "start_adding": "Start adding properties to your favorites list"

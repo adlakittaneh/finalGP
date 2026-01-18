@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { useLanguage } from "@/context/LanguageContext";
 import { useAuth } from "@/context/AuthContext";
 import { Globe, User, LogOut, Menu, X } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -29,6 +30,7 @@ const Navbar = () => {
   const { language, setLanguage } = useLanguage();
   const { user, isAuthenticated, logout } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
   const handleSelect = (lang: "AR" | "US") => {
     setLanguage(lang);
@@ -52,6 +54,7 @@ const Navbar = () => {
 localStorage.removeItem("isAuthenticated");
 
   logout();
+   navigate("/login");
 };
 
   const getUserInitials = () => {

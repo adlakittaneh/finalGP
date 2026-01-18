@@ -29,6 +29,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import { storage } from "@/firebase";
 import { apiFetch } from "@/api/apiFetch";
 import { ref, uploadBytes, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import PropertyCard from "@/components/PropertyCard";
 const API_BASE = "http://easyaqar.org/api";
 
 
@@ -71,6 +72,10 @@ const [lat, setLat] = useState<number | null>(null);
 const [lng, setLng] = useState<number | null>(null);
 const [fullAddress, setFullAddress] = useState<string>("");
 const [openMap, setOpenMap] = useState(false);
+// بعد كل الـ useState
+const [submittedProperty, setSubmittedProperty] = useState<any | null>(null);
+const [myProperties, setMyProperties] = useState<any[]>([]);
+
 
   // حالة الموقع (من الـ LocationPicker)
   const [location, setLocation] = useState<{
@@ -154,10 +159,45 @@ const getAddressFromCoordinates = async (lat: number, lng: number): Promise<stri
   // لو ما في شارع → مدينة + دولة (وهذا طبيعي)
   return parts.length ? parts.join("، ") : bestResult.formatted_address;
 };
+const fetchMyProperties = async () => {
+  try {
+    const data = await apiFetch(`${API_BASE}/listings/my-listings?page=0&size=20`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include", 
+    });
+
+    if (data?.content && Array.isArray(data.content)) {
+      const formattedProperties = data.content.map((prop: any) => {
+        const images = Array.isArray(prop.media)
+          ? prop.media.filter(m => m.mediaUrl && !m.mediaUrl.endsWith(".mp4")).map(m => m.mediaUrl)
+          : [];
+        const video = Array.isArray(prop.media)
+          ? prop.media.find(m => m.mediaUrl && m.mediaUrl.endsWith(".mp4"))?.mediaUrl
+          : undefined;
+
+        return {
+          ...prop,
+          images,
+          video
+        };
+      });
+
+      setMyProperties(formattedProperties);
+    } else {
+      setMyProperties([]);
+    }
+  } catch (err) {
+    console.error("Failed to fetch my listings:", err);
+    setMyProperties([]);
+  }
+};
+
+
 
   const fetchCountries = async () => {
     try {
-      const data = await apiFetch(`${API_BASE}/locations/countries?page=0&size=100`, {
+      const data = await apiFetch(`${API_BASE}/locations/countries?page=0&size=20`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -180,7 +220,7 @@ const getAddressFromCoordinates = async (lat: number, lng: number): Promise<stri
 
   try {
     const data = await apiFetch(
-      `${API_BASE}/locations/cities/country/${countryId}?page=0&size=100`,
+      `${API_BASE}/locations/cities/country/${countryId}?page=0&size=20`,
       {
         method: "GET",
       }
@@ -195,18 +235,16 @@ const getAddressFromCoordinates = async (lat: number, lng: number): Promise<stri
   }
 };
 
-  useEffect(() => {
-    if (showAddForm) {
-      fetchCountries();
-    }
-    // إذا أردت تحميل الدول عند بداية تحميل الصفحة بدل فتح الفورم ضع [] كـ dependency
-  }, [showAddForm]);
+ useEffect(() => {
+  fetchCountries();      
+  fetchMyProperties();   
+}, []); 
+
 
   // عند تغيير الدولة المحددة نجيب مدنها
   useEffect(() => {
     if (selectedCountry) {
       fetchCities(selectedCountry);
-      // في حالة تغيير الدولة نعيد تعيين المدينة المحددة
       setSelectedCity("");
     } else {
       setCities([]);
@@ -262,10 +300,6 @@ const handleLocationSelected = async (selectedLocation: { lat: number; lng: numb
   setShowAddForm(true);
 };
 
-
-
-
-
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files) return;
@@ -307,7 +341,7 @@ const uploadMediaToFirebase = async (
   onProgress?: (fileName: string, progress: number) => void
 ) => {
   const uploadPromises = uploadedFiles.map((item) =>
-    new Promise<string | null>((resolve) => {
+    new Promise<string>((resolve, reject) => {
       if (!item.file) return resolve(null);
 
       const fileRef = ref(storage, `properties/${Date.now()}-${item.file.name}`);
@@ -321,7 +355,7 @@ const uploadMediaToFirebase = async (
         },
         (error) => {
           console.error(`فشل رفع الملف ${item.file.name}:`, error);
-          resolve(null);
+          reject(error);
         },
         async () => {
           try {
@@ -329,7 +363,7 @@ const uploadMediaToFirebase = async (
             resolve(url);
           } catch (err) {
             console.error(`فشل الحصول على رابط الملف ${item.file.name}:`, err);
-            resolve(null);
+           reject(err);
           }
         }
       );
@@ -337,6 +371,7 @@ const uploadMediaToFirebase = async (
   );
 
   const results = await Promise.all(uploadPromises);
+  console.log(results)
   return results.filter((url): url is string => url !== null); // type guard
 };
 
@@ -358,6 +393,22 @@ const handleSubmit = async (e: React.FormEvent) => {
     const mediaUrls = await uploadMediaToFirebase(uploadedFiles, (fileName, progress) => {
       console.log(`${fileName} رفع: ${Math.round(progress)}%`);
     });
+    if (mediaUrls.length === 0) {
+  toast({
+    title: "خطأ",
+    description: "فشل رفع الملفات، حاول مرة أخرى",
+    variant: "destructive",
+  });
+  return; 
+}
+if (mediaUrls.length !== uploadedFiles.length) {
+  toast({
+    title: "خطأ",
+    description: "لم يتم رفع جميع الملفات بنجاح",
+    variant: "destructive",
+  });
+  return;
+}
 
     console.log("روابط الملفات المرفوعة:", mediaUrls);
 
@@ -387,26 +438,46 @@ const handleSubmit = async (e: React.FormEvent) => {
    const response = await apiFetch(`${API_BASE}/listings`, {
   method: "POST",
   body: JSON.stringify(body),
+   headers: { "Content-Type": "application/json" },
 });
-
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      toast({
-        title: "خطأ",
-        description: "فشل إضافة العقار",
-        variant: "destructive",
-      });
-      console.error("Error adding property:", data);
-      return;
-    }
+    const data = response;
+   if (!data || !data.id) {
+  toast({
+    title: "خطأ",
+    description: "فشل إضافة العقار",
+    variant: "destructive",
+  });
+  return;
+}
+// بعد toast نجاح الإضافة
+setSubmittedProperty({
+  id: Date.now().toString(), // مؤقت
+  type: listingType,
+  title: titleEN,
+  titleAr: titleAR,
+  propertyType,
+  city: cities.find(c => c.id === selectedCity)?.name || "", 
+  capital: countries.find(c => c.id === selectedCountry)?.name || "",
+  price: Number(price) || 0,
+  images: uploadedFiles.filter(f => f.type === "image").map(f => f.preview),
+  video: uploadedFiles.find(f => f.type === "video")?.preview,
+  arabicDescription: descriptionAr,
+  englishDescription: descriptionEn,
+  area,
+  bedrooms,
+  bathrooms,
+  parking,
+  yearBuilt: Number(yearBuilt) || undefined,
+  furnished,
+  showActions: false,
+});
 
     // نجاح الإضافة
     toast({
       title: t("dashboard.approve"),
       description: "تم إضافة العقار بنجاح",
     });
+
 
     // إعادة تعيين الملفات والفورم
     setUploadedFiles([]);
@@ -421,8 +492,6 @@ const handleSubmit = async (e: React.FormEvent) => {
     });
   }
 };
-
-
   // دالة مساعدة لاختيار الاسم المعروض حسب اللغة
   const displayName = (item: any) => {
     // إذا اللغة عربية نعرض nameAr، وإلا نعرض name
@@ -694,6 +763,18 @@ const handleSubmit = async (e: React.FormEvent) => {
 
             <div className="flex flex-col sm:flex-row gap-3">
               <Button type="submit" className="flex-1 gradient-primary" disabled={!canSubmit}>{t("dashboard.approve")}</Button>
+{/* عرض العقار المضاف فور الإرسال */}
+{submittedProperty && (
+  <div className="mt-8">
+    <h2 className="text-lg font-bold mb-2">عقارك المضاف:</h2>
+    <PropertyCard
+      {...submittedProperty}
+      images={submittedProperty.images || []} // تأكد من وجود الصور
+      video={submittedProperty.video || undefined} // تأكد من وجود الفيديو
+    />
+  </div>
+)}
+
 
               <Button type="button" variant="outline" onClick={() => handleDialogClose(false)} className="w-full sm:w-auto">{t("dashboard.reject")}</Button>
             </div>
@@ -701,6 +782,50 @@ const handleSubmit = async (e: React.FormEvent) => {
         </DialogContent>
       </Dialog>
 
+{/* عرض كل عقارات المستخدم المعتمدة */}<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+  {myProperties && myProperties.length > 0 ? (
+    myProperties.map((prop) => {
+      // استخراج الصور والفيديو بشكل آمن
+      const images = Array.isArray(prop.media)
+        ? prop.media
+            .filter((m) => m.mediaUrl && !m.mediaUrl.endsWith(".mp4"))
+            .map((m) => m.mediaUrl)
+        : [];
+
+      const video = Array.isArray(prop.media)
+        ? prop.media.find((m) => m.mediaUrl && m.mediaUrl.endsWith(".mp4"))?.mediaUrl
+        : undefined;
+
+      return (
+        <PropertyCard
+          key={prop.id}
+          id={String(prop.id)}
+          type={prop.listingType || "SELL"}
+          title={prop.title || ""}
+          titleAr={prop.titleAr || ""}
+          propertyType={prop.propertyType || ""}
+          city={prop.cityName || ""}
+          capital={prop.countryName || ""}
+          price={prop.price || 0}
+           images={prop.images || []} 
+          video={prop.video}
+          arabicDescription={prop.descriptionAr || ""}
+          englishDescription={prop.description || ""}
+          area={prop.area || 0}
+          bedrooms={prop.bedrooms || 0}
+          bathrooms={prop.bathrooms || 0}
+          parking={prop.parking || 0}
+          yearBuilt={prop.yearBuilt || undefined}
+          furnished={prop.furnished || false}
+        />
+      );
+    })
+  ) : (
+    <p className="text-muted-foreground col-span-full text-center py-8">
+      {t("dashboard.no_pending_properties")}
+    </p>
+  )}
+</div>
       <Footer />
     </div>
   );

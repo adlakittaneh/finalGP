@@ -75,7 +75,7 @@ const [pendingProperties, setPendingProperties] = useState<PropertyCardProps[]>(
   useEffect(() => {
   const fetchCountries = async () => {
   try {
-    const data = await apiFetch(`${API_BASE}/locations/countries?page=0&size=100`, {
+    const data = await apiFetch(`${API_BASE}/locations/countries?page=0&size=20`, {
       method: "GET",
     });
     const list = Array.isArray(data?.content)
@@ -101,7 +101,7 @@ const [pendingProperties, setPendingProperties] = useState<PropertyCardProps[]>(
   useEffect(() => {
   const fetchPendingProperties = async () => {
     try {
-      const data: BackendPageableResponse = await apiFetch(`${API_BASE}/admin/listings/pending?page=0&size=100`, {
+      const data: BackendPageableResponse = await apiFetch(`${API_BASE}/admin/listings/pending?page=0&size=20`, {
         method: "GET",
       });
 
@@ -167,7 +167,7 @@ const [pendingProperties, setPendingProperties] = useState<PropertyCardProps[]>(
  const fetchCities = async (countryId: number) => {
   try {
     const data = await apiFetch(
-      `${API_BASE}/locations/cities/country/${countryId}?page=0&size=100`,
+      `${API_BASE}/locations/cities/country/${countryId}?page=0&size=20`,
       {
         method: "GET",
       }
@@ -316,7 +316,7 @@ const getAllUsers = async () => {
 
         try {
           const citiesData = await apiFetch(
-            `${API_BASE}/locations/cities/country/${countryId}?page=0&size=100`,
+            `${API_BASE}/locations/cities/country/${countryId}?page=0&size=20`,
             { method: "GET" }
           );
 

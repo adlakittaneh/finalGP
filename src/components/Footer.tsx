@@ -42,37 +42,11 @@ const Footer = () => {
                 {t("navbar.add_property")}
               </Link>
               <Link
-                to="/dashboard"
+                to="/contact"
                 className="block text-sm sm:text-base text-muted-foreground hover:text-primary transition-smooth"
               >
-                {t("navbar.dashboard")}
+                {t("navbar.contact")}
               </Link>
-            </div>
-          </div>
-
-          {/* Social Media */}
-          <div>
-            <h3 className="font-bold text-base sm:text-lg mb-3 sm:mb-4">{t("footer.contact_us")}</h3>
-          
-            <div className="flex gap-2 sm:gap-3">
-              <a
-                href="#"
-                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-muted hover:bg-primary hover:text-primary-foreground flex items-center justify-center transition-smooth"
-              >
-                <Facebook className="w-4 h-4 sm:w-5 sm:h-5" />
-              </a>
-              <a
-                href="#"
-                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-muted hover:bg-primary hover:text-primary-foreground flex items-center justify-center transition-smooth"
-              >
-                <Instagram className="w-4 h-4 sm:w-5 sm:h-5" />
-              </a>
-              <a
-                href="#"
-                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-muted hover:bg-green-500 hover:text-white flex items-center justify-center transition-smooth"
-              >
-                <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5" />
-              </a>
             </div>
           </div>
         </div>
