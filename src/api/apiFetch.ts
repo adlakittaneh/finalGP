@@ -1,4 +1,4 @@
-const API_BASE = "http://easyaqar.org/api";
+const API_BASE = "/api";
 export async function apiFetch(url: string, options: any = {}) {
   const defaultOptions = {
     credentials: "include",

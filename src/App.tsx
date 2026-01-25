@@ -1,7 +1,6 @@
 import "./i18n";
 import { useTranslation } from "react-i18next";
 import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -12,6 +11,9 @@ import Dashboard from "./pages/Dashboard";
 import Favorites from "./pages/Favorites";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
+import Chat from "./pages/ChatAdmin";
+import Inbox from "./pages/Inbox";
+import AllPropertyListing from "./pages/allPropertylisting";
 
 import { LanguageProvider } from "./context/LanguageContext";
 import { AuthProvider } from "./context/AuthContext";
@@ -42,6 +44,11 @@ const App = () => {
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/favorites" element={<Favorites />} />
                 <Route path="/contact" element={<Contact />} />
+                <Route path="/inbox" element={<Inbox />} />
+                <Route path="/chat/:userId" element={<Chat />} />
+                <Route path="/inbox" element={<Inbox />} />
+                <Route path="/allPropertylisting" element={< AllPropertyListing/>} />
+              
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </BrowserRouter>

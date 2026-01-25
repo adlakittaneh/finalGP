@@ -8,7 +8,9 @@
     "contact": "Contact Us",
     "language": "Language",
     "login": "Login",
-    "logout": "Logout"
+    "logout": "Logout",
+    "Chat": "Chat",
+    "all_properties": "All Properties"
   },
   "hero": {
     "title": "Find Your Perfect Property",
@@ -21,7 +23,11 @@
     "HOUSE": "Houses",
     "STORE": "Store",
     "OFFICE": "Office",
-    "LAND": "Land"
+    "LAND": "Land",
+    "Noproperties": "No properties available in this category",
+    "ViewLess": "View Less",
+    "ViewMore": "View More",
+    "title":" all Property"
   },
  "propertyTypes": {
   "LAND": "Land",
@@ -60,6 +66,10 @@
     "title": "Featured Properties"
   },
   "propertyCard": {
+    "ownerInfo": "Owner Information",
+    "ownerPhone":"Owner Phone",
+    "ownerEmail":"Owner Email",
+    "ownerName":"Owner Name",
     "from": "From",
     "to": "To",
     "cityHint":"e.g., Nablus",
@@ -84,7 +94,7 @@
     "TitleAr": "Title (Arabic)",
     "TitleEn": "Title (English)",
 "Country": "Country",
-    "City": "City",
+    "city": "City",
     "selectCountry": "Select Country",
     "selectCity": "Select City",
 
@@ -120,6 +130,8 @@
   "start_adding": "Start adding properties to your favorites list"
 },
 "dashboard": {
+  "delete": "Delete",
+  "update": "Update",
   "pending_review": "Pending Review",
   "published_properties": "Published Properties",
   "total_users": "Total Users",

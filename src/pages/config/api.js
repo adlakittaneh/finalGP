@@ -1,1 +1,1 @@
-export const API_BASE = "http://easyaqar.org/api";
+export const API_BASE = "/api";

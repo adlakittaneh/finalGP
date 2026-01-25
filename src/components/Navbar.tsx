@@ -18,6 +18,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { ToastContainer, toast } from "react-toastify";
 import { API_BASE } from "../pages/config/api";
 import { apiFetch } from "../api/apiFetch";
+import Chat from "../pages/ChatAdmin";
 import {
   Sheet,
   SheetContent,
@@ -25,6 +26,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+
 const Navbar = () => {
   const { t } = useTranslation();
   const { language, setLanguage } = useLanguage();
@@ -36,26 +38,26 @@ const Navbar = () => {
     setLanguage(lang);
   };
 
- const handleLogout = async (e: React.FormEvent) => {
-  e.preventDefault();
+  const handleLogout = async (e: React.FormEvent) => {
+    e.preventDefault();
 
-  try {
-    const data = await apiFetch(`${API_BASE}/auth/logout`, {
-      method: "POST",
-    });
+    try {
+      const data = await apiFetch(`${API_BASE}/auth/logout`, {
+        method: "POST",
+      });
 
-    console.log("Response data:", data);
-    toast.success("تم تسجيل الخروج بنجاح.");
-  } catch (error) {
-    console.error("Logout failed:", error);
-    toast.error("فشل تسجيل الخروج.");
-  }
-  localStorage.removeItem("user");
-localStorage.removeItem("isAuthenticated");
+      console.log("Response data:", data);
+      toast.success("تم تسجيل الخروج بنجاح.");
+    } catch (error) {
+      console.error("Logout failed:", error);
+      toast.error("فشل تسجيل الخروج.");
+    }
+    localStorage.removeItem("user");
+    localStorage.removeItem("isAuthenticated");
 
-  logout();
-   navigate("/login");
-};
+    logout();
+    navigate("/login");
+  };
 
   const getUserInitials = () => {
     if (user?.firstName && user?.lastName) {
@@ -89,14 +91,24 @@ localStorage.removeItem("isAuthenticated");
 
           {/* Desktop Navigation Links */}
           <div className="hidden md:flex items-center gap-6">
-            <Link to="/" className="text-foreground hover:text-primary transition-smooth">
+            <Link
+              to="/"
+              className="text-foreground hover:text-primary transition-smooth"
+            >
               {t("navbar.home")}
             </Link>
-            <Link to="/favorites" className="text-foreground hover:text-primary transition-smooth">
+            <Link
+              to="/favorites"
+              className="text-foreground hover:text-primary transition-smooth"
+            >
               {t("navbar.favorites")}
             </Link>
             <Link
-              to={localStorage.getItem("isAuthenticated") === "true" ? "/add-property" : "/login"}
+              to={
+                localStorage.getItem("isAuthenticated") === "true"
+                  ? "/add-property"
+                  : "/login"
+              }
               onClick={(e) => {
                 if (localStorage.getItem("isAuthenticated") !== "true") {
                   toast.info("يجب تسجيل الدخول أولاً لإضافة عقار");
@@ -106,15 +118,38 @@ localStorage.removeItem("isAuthenticated");
             >
               {t("navbar.add_property")}
             </Link>
-
+            <Link
+              to="/allPropertylisting"
+              className="text-foreground hover:text-primary transition-smooth"
+            >
+              {t("navbar.all_properties")}
+            </Link>
             {isAuthenticated && user?.role === "ADMIN" && (
-              <Link to="/dashboard" className="text-foreground hover:text-primary transition-smooth">
+              <Link
+                to="/dashboard"
+                className="text-foreground hover:text-primary transition-smooth"
+              >
                 {t("navbar.dashboard")}
               </Link>
             )}
-            <Link to="/contact" className="text-foreground hover:text-primary transition-smooth">
-              {t("navbar.contact")}
-            </Link>
+
+            {isAuthenticated && user?.role === "ADMIN" && (
+              //chat link
+              <Link
+                to="/Inbox"
+                className="text-foreground hover:text-primary transition-smooth"
+              >
+                {t("navbar.Chat")}
+              </Link>
+            )}
+            {!(isAuthenticated && user?.role === "ADMIN") && (
+              <Link
+                to="/contact"
+                className="text-foreground hover:text-primary transition-smooth"
+              >
+                {t("navbar.contact")}
+              </Link>
+            )}
           </div>
 
           {/* Desktop Actions */}
@@ -124,12 +159,18 @@ localStorage.removeItem("isAuthenticated");
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" size="sm" className="gap-2">
                   <Globe className="w-4 h-4" />
-                  <span className="hidden sm:inline">{t("navbar.language")}</span>
+                  <span className="hidden sm:inline">
+                    {t("navbar.language")}
+                  </span>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align={isRTL ? "start" : "end"}>
-                <DropdownMenuItem onClick={() => handleSelect("AR")}>العربية</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleSelect("US")}>English</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleSelect("AR")}>
+                  العربية
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleSelect("US")}>
+                  English
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
 
@@ -137,7 +178,11 @@ localStorage.removeItem("isAuthenticated");
             {isAuthenticated && user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="sm" className="rounded-full h-9 w-9 p-0">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="rounded-full h-9 w-9 p-0"
+                  >
                     <Avatar className="h-9 w-9">
                       <AvatarFallback className="gradient-primary text-white">
                         {getUserInitials()}
@@ -145,7 +190,10 @@ localStorage.removeItem("isAuthenticated");
                     </Avatar>
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align={isRTL ? "start" : "end"} className="w-56">
+                <DropdownMenuContent
+                  align={isRTL ? "start" : "end"}
+                  className="w-56"
+                >
                   <DropdownMenuLabel>
                     <div className="flex flex-col space-y-1">
                       <p className="text-sm font-medium leading-none">
@@ -159,7 +207,10 @@ localStorage.removeItem("isAuthenticated");
                     </div>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
+                  <DropdownMenuItem
+                    onClick={handleLogout}
+                    className="cursor-pointer"
+                  >
                     <LogOut className={`w-4 h-4 ${isRTL ? "ml-2" : "mr-2"}`} />
                     <span>{t("navbar.logout")}</span>
                   </DropdownMenuItem>
@@ -167,7 +218,11 @@ localStorage.removeItem("isAuthenticated");
               </DropdownMenu>
             ) : (
               <Link to="/login">
-                <Button variant="default" size="sm" className="gap-2 gradient-primary">
+                <Button
+                  variant="default"
+                  size="sm"
+                  className="gap-2 gradient-primary"
+                >
                   <User className="w-4 h-4" />
                   <span className="hidden sm:inline">{t("navbar.login")}</span>
                 </Button>
@@ -185,8 +240,12 @@ localStorage.removeItem("isAuthenticated");
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align={isRTL ? "start" : "end"}>
-                <DropdownMenuItem onClick={() => handleSelect("AR")}>العربية</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleSelect("US")}>English</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleSelect("AR")}>
+                  العربية
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleSelect("US")}>
+                  English
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
 
@@ -197,13 +256,19 @@ localStorage.removeItem("isAuthenticated");
                   <Menu className="w-5 h-5" />
                 </Button>
               </SheetTrigger>
-              <SheetContent side={isRTL ? "right" : "left"} className="w-[300px] sm:w-[400px]">
+              <SheetContent
+                side={isRTL ? "right" : "left"}
+                className="w-[300px] sm:w-[400px]"
+              >
                 <SheetHeader>
-                  <SheetTitle className="text-2xl font-bold" style={{
-                    background: "linear-gradient(90deg, #f9c948, #144993)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                  }}>
+                  <SheetTitle
+                    className="text-2xl font-bold"
+                    style={{
+                      background: "linear-gradient(90deg, #f9c948, #144993)",
+                      WebkitBackgroundClip: "text",
+                      WebkitTextFillColor: "transparent",
+                    }}
+                  >
                     {t("brand_name")}
                   </SheetTitle>
                 </SheetHeader>
@@ -224,7 +289,18 @@ localStorage.removeItem("isAuthenticated");
                     {t("navbar.favorites")}
                   </Link>
                   <Link
-                    to={localStorage.getItem("isAuthenticated") === "true" ? "/add-property" : "/login"}
+                    to="/allPropertylisting"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="text-lg font-medium text-foreground hover:text-primary transition-smooth py-2 border-b"
+                  >
+                    {t("navbar.all_properties")}
+                  </Link>
+                  <Link
+                    to={
+                      localStorage.getItem("isAuthenticated") === "true"
+                        ? "/add-property"
+                        : "/login"
+                    }
                     onClick={(e) => {
                       setMobileMenuOpen(false);
                       if (localStorage.getItem("isAuthenticated") !== "true") {
@@ -282,13 +358,21 @@ localStorage.removeItem("isAuthenticated");
                           variant="outline"
                           className="w-full"
                         >
-                          <LogOut className={`w-4 h-4 ${isRTL ? "ml-2" : "mr-2"}`} />
+                          <LogOut
+                            className={`w-4 h-4 ${isRTL ? "ml-2" : "mr-2"}`}
+                          />
                           <span>{t("navbar.logout")}</span>
                         </Button>
                       </div>
                     ) : (
-                      <Link to="/login" onClick={() => setMobileMenuOpen(false)}>
-                        <Button variant="default" className="w-full gradient-primary gap-2">
+                      <Link
+                        to="/login"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        <Button
+                          variant="default"
+                          className="w-full gradient-primary gap-2"
+                        >
                           <User className="w-4 h-4" />
                           <span>{t("navbar.login")}</span>
                         </Button>
